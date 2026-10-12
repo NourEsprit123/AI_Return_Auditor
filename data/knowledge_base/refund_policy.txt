@@ -1,0 +1,107 @@
+REFUND POLICY
+E-Commerce Return Auditor Platform
+Version 2.1 — Effective January 2026
+
+---
+
+SECTION 1 — REFUND ELIGIBILITY
+
+A refund may be issued when a return request has been approved and the returned product has been received and inspected at the warehouse, or when the nature of the claim makes a return unnecessary (see Section 4).
+
+Refunds are issued to the original payment method used at the time of purchase. Processing times depend on the payment provider and are outside the platform's direct control once the refund has been initiated.
+
+---
+
+SECTION 2 — FULL REFUND CONDITIONS
+
+A full refund of the purchase price including applicable taxes is issued when:
+
+- The product arrived with damage that renders it completely unusable or unsafe, such as a broken electronic device, shattered screen, or structurally compromised product.
+- The wrong product was delivered and the correct product cannot be shipped within 5 business days.
+- The product arrived missing essential components without which it cannot be used for its primary purpose.
+- The product suffered severe shipping damage affecting all or most of the product.
+- The product is confirmed to have a manufacturing defect covered under the warranty policy that makes it non-functional.
+
+A full refund includes the original purchase price and any shipping fees paid by the customer.
+
+---
+
+SECTION 3 — PARTIAL REFUND CONDITIONS
+
+A partial refund of the purchase price may be issued when:
+
+- The product arrived with cosmetic damage that does not affect its primary function, such as a surface stain, minor scratch, or small dent.
+- The damage is limited to a non-essential component or accessory included with the product.
+- The product can still be used for its primary purpose despite the reported defect.
+- The customer requests to keep the damaged product rather than returning it.
+
+The partial refund amount is determined by the severity of the damage and the proportion of the product value affected. Partial refund percentages:
+
+- Low severity cosmetic damage: 10% to 20% of purchase price.
+- Medium severity damage affecting minor function: 20% to 40% of purchase price.
+- High severity damage affecting primary function: 50% to 80% of purchase price.
+- Complete non-functionality or safety risk: proceed to full refund (Section 2).
+
+---
+
+SECTION 4 — REFUND WITHOUT RETURN
+
+In the following cases a refund may be issued without requiring the customer to return the product:
+
+- The product's purchase price is below 15 euros and the return shipping cost would exceed the product value.
+- The returned product would have no resale or recycling value and return shipping would represent a net cost to the platform.
+- The damage is confirmed by visual evidence and a return would impose an unreasonable burden on the customer.
+
+The decision to issue a refund without return is at the discretion of the platform and requires human reviewer approval.
+
+---
+
+SECTION 5 — REFUND TIMELINE
+
+| Step | Timeline |
+|---|---|
+| Return request approved | Day 0 |
+| Return shipping label issued | Within 2 business days |
+| Product received at warehouse | Within 14 days of label issuance |
+| Warehouse inspection completed | Within 2 business days of receipt |
+| Refund initiated | Within 5 business days of inspection |
+| Funds visible in customer account | 3 to 10 business days depending on payment provider |
+
+---
+
+SECTION 6 — NON-REFUNDABLE SITUATIONS
+
+A refund will not be issued in the following situations:
+
+- The return request was submitted after the 30-day return window and no extension was approved.
+- The product was damaged by the customer after delivery.
+- The customer description of the damage does not match the visual evidence provided.
+- The returned product does not match the product for which the return was approved.
+- The product shows evidence of use, modification, or tampering that was not disclosed in the return request.
+- The claim is determined to be fraudulent following human review.
+
+---
+
+SECTION 7 — REFUND FOR ORDERS WITH MULTIPLE ITEMS
+
+For orders containing multiple items, the refund applies only to the specific item or items that are returned and approved. The remaining items in the order are not affected.
+
+If a bundle or set is purchased and only part of the set is damaged, the refund is calculated as a proportion of the total bundle price corresponding to the damaged item, unless the damage renders the entire bundle unusable.
+
+---
+
+SECTION 8 — REFUND DISPUTES
+
+If a customer disagrees with the refund decision, they may submit a dispute within 15 days of the refund decision notification. Disputes are reviewed by a senior human reviewer. The outcome of the dispute review is final.
+
+---
+
+SECTION 9 — REFUND FOR HIGH-VALUE ORDERS
+
+Orders with a total purchase price above 500 euros are subject to additional verification before a refund is issued:
+
+- A human reviewer must approve the refund decision.
+- Additional photographic evidence may be requested.
+- A video of the damage may be requested for orders above 1000 euros.
+
+These additional checks do not affect the refund timeline beyond adding up to 3 business days for the human review step.

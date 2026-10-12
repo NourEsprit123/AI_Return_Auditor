@@ -1,0 +1,93 @@
+RETURN POLICY
+E-Commerce Return Auditor Platform
+Version 2.1 — Effective January 2026
+
+---
+
+SECTION 1 — GENERAL RETURN CONDITIONS
+
+Customers may request a product return within 30 days of the confirmed delivery date. The return request must be submitted through the official return portal and must include a valid order ID, a clear description of the issue, and photographic evidence of the product condition at the time of receipt.
+
+Returns are accepted for products that arrive damaged, defective, or significantly different from the product description on the platform. A product is considered damaged if it presents visible physical defects such as cracks, breaks, tears, stains, deformation, or any structural damage that was not present in the product listing.
+
+Products that show no visible damage and function as described are not eligible for return unless the wrong item was delivered.
+
+---
+
+SECTION 2 — ELIGIBLE DAMAGE TYPES
+
+The following damage types are eligible for return:
+
+- Broken or cracked components: any structural break affecting the usability or integrity of the product, including broken frames, cracked screens, broken handles, detached parts, or fractured casing.
+- Stains and contamination: visible stains, liquid damage marks, oil residue, or contamination present at the time of delivery and not caused by the customer.
+- Tears and cuts: fabric tears, leather cuts, sole separation, seam failures, or material splits observed before first use.
+- Deformation and warping: products with bent, warped, compressed, or deformed shapes that deviate significantly from the original product specification.
+- Missing components: products delivered with missing parts, accessories, or components listed in the original product description.
+- Wrong item delivered: the delivered product does not match the ordered product in terms of model, color, size, or category.
+- Shipping damage: damage caused during transportation, including crushed packaging, impact marks, or moisture damage visible on the product.
+
+---
+
+SECTION 3 — NON-ELIGIBLE RETURNS
+
+The following situations do not qualify for a return:
+
+- Damage caused by the customer after delivery, including accidental drops, improper use, unauthorized modifications, or exposure to conditions not suitable for the product type.
+- Normal wear and tear from regular use.
+- Minor cosmetic imperfections that do not affect product functionality and are within acceptable manufacturing tolerances as disclosed in the product listing.
+- Products returned after the 30-day return window without prior written approval from customer service.
+- Products with removed, damaged, or tampered tags, seals, or original packaging where the seal is required for hygiene or safety reasons.
+- Digital products, downloadable software, or gift cards after activation or use.
+
+---
+
+SECTION 4 — EVIDENCE REQUIREMENTS
+
+A return request must be supported by:
+
+1. At least one clear photograph showing the damage from a distance sufficient to identify the product type and from a close-up distance sufficient to show the damage detail.
+2. A written description of the damage, including when it was first observed and whether the product was used before the damage was noticed.
+3. A description of the product condition at the time of opening the package.
+
+If the photographic evidence does not clearly show the reported damage, the claim will be escalated for human review. If the customer description does not match the visual evidence provided, the claim will be marked as inconsistent and escalated to a human reviewer.
+
+---
+
+SECTION 5 — RETURN WINDOW EXCEPTIONS
+
+The 30-day return window may be extended to 60 days in the following cases:
+
+- The product was a gift and the recipient was not aware of the return policy at the time of purchase.
+- The damage was latent and only became apparent after a period of normal use, provided the latent defect can be documented.
+- The customer was unable to submit the return request due to a platform technical issue, verified by platform logs.
+
+Extended return window requests must be submitted in writing to customer service and are subject to individual review.
+
+---
+
+SECTION 6 — RETURN PROCESS
+
+Upon approval of a return request:
+
+1. The customer will receive a prepaid return shipping label within 2 business days.
+2. The product must be returned in its original or equivalent packaging.
+3. The product must reach the warehouse within 14 days of the return label issuance.
+4. The refund will be initiated within 5 business days of warehouse receipt and inspection.
+
+If the returned product does not match the approved return claim upon warehouse inspection, the refund may be reduced or refused.
+
+---
+
+SECTION 7 — PRODUCT CATEGORIES WITH SPECIAL CONDITIONS
+
+Electronics: returns accepted within 30 days for defective or damaged products. Products showing signs of liquid damage caused by the customer are not eligible unless liquid damage was present at delivery and documented.
+
+Footwear: returns accepted for sole separation, material defects, visible stains present at delivery, or structural damage. Footwear showing signs of outdoor use is not eligible for return on cosmetic grounds unless the damage was present before first use.
+
+Clothing and apparel: returns accepted for fabric defects, incorrect sizing where the delivered size differs from the ordered size, or damage present at delivery. Items washed or altered by the customer are not eligible.
+
+Accessories: returns accepted for broken components, missing parts, or damage present at delivery. Accessories such as eyeglasses are eligible for return if a lens, frame, or temple arm is broken, cracked, or detached upon delivery.
+
+Home and kitchen: returns accepted for broken, cracked, or missing components present at delivery.
+
+Beauty products: returns accepted only if the product was delivered sealed and the seal was broken to discover a defect. Opened beauty products are not eligible for return on cosmetic grounds.

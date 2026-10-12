@@ -2,9 +2,9 @@ streamlit
 google-genai
 pydantic
 python-dotenv
-chromadb
-sentence-transformers
+chromadb>=1.5.0
+sentence-transformers>=2.3.0
+langchain-text-splitters
 pandas
 pillow
 requests
-

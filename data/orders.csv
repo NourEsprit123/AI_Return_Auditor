@@ -1,0 +1,16 @@
+order_id,customer_name,product_name,product_category,purchase_price,order_date,delivery_date,delivery_status,days_since_delivery,return_window_days,within_return_window
+ORD-001,Alice Martin,Nike Pegasus 41,Footwear,120.00,2026-09-01,2026-09-05,Delivered,37,30,False
+ORD-002,Bruno Silva,Samsung Galaxy S24,Electronics,899.00,2026-09-10,2026-09-13,Delivered,29,30,True
+ORD-003,Clara Dubois,Ray-Ban Wayfarer Classic,Accessories,165.00,2026-09-15,2026-09-18,Delivered,24,30,True
+ORD-004,David Chen,Adidas Ultraboost 22,Footwear,180.00,2026-09-20,2026-09-23,Delivered,19,30,True
+ORD-005,Emma Leclerc,Levi's 501 Jeans,Clothing,89.00,2026-09-25,2026-09-28,Delivered,14,30,True
+ORD-006,Farid Benali,Sony WH-1000XM5 Headphones,Electronics,349.00,2026-09-28,2026-10-02,Delivered,10,30,True
+ORD-007,Grace Kim,KitchenAid Stand Mixer,Home & Kitchen,450.00,2026-10-01,2026-10-05,Delivered,7,30,True
+ORD-008,Hugo Moreau,Chanel No.5 Perfume,Beauty,120.00,2026-10-03,2026-10-07,Delivered,5,30,True
+ORD-009,Ingrid Svensson,Apple AirPods Pro,Electronics,279.00,2026-10-05,2026-10-08,Delivered,4,30,True
+ORD-010,James Wilson,Gucci Belt,Accessories,320.00,2026-10-06,2026-10-09,Delivered,3,30,True
+ORD-011,Karim Mansour,Puma RS-X Sneakers,Footwear,95.00,2026-10-07,2026-10-10,Delivered,2,30,True
+ORD-012,Laura Petit,Dyson V15 Vacuum,Home & Kitchen,649.00,2026-10-08,2026-10-11,Delivered,1,30,True
+ORD-013,Mohamed Alami,iPad Air 5th Gen,Electronics,749.00,2026-08-01,2026-08-05,Delivered,68,30,False
+ORD-014,Nina Kowalski,Zara Summer Dress,Clothing,45.00,2026-10-09,2026-10-11,Delivered,1,30,True
+ORD-015,Omar Hajji,Bose QuietComfort 45,Electronics,279.00,2026-10-10,In Transit,0,30,False

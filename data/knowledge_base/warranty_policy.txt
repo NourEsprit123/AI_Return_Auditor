@@ -1,0 +1,110 @@
+WARRANTY POLICY
+E-Commerce Return Auditor Platform
+Version 2.1 — Effective January 2026
+
+---
+
+SECTION 1 — WARRANTY COVERAGE
+
+Products sold through the platform may carry one of the following warranty types:
+
+1. Platform Satisfaction Guarantee: applies to all products sold on the platform, covering defects present at delivery for 30 days.
+2. Manufacturer Warranty: provided by the product manufacturer and transmitted to the customer through the platform. Duration and conditions vary by manufacturer and product category.
+3. Extended Warranty: an optional paid warranty that extends coverage beyond the standard period.
+
+The Platform Satisfaction Guarantee does not replace or override the manufacturer warranty. Both may apply simultaneously.
+
+---
+
+SECTION 2 — MANUFACTURING DEFECTS
+
+A manufacturing defect is a flaw or failure that originates in the production process and is not caused by the customer. Manufacturing defects covered under warranty include:
+
+- Structural failure: components that break, detach, or fracture under normal use conditions due to inadequate material strength or assembly quality. Examples include eyeglass temple arms that detach at the hinge without impact, shoe soles that separate from the upper without outdoor use, electronic connectors that fail without physical stress.
+- Material defects: use of incorrect or substandard materials that result in premature degradation, discoloration, deformation, or failure. Examples include fabric that tears under light tension, metal that rusts within the first 30 days, or plastic that cracks without impact.
+- Assembly defects: incorrect assembly resulting in misaligned components, improperly secured fasteners, reversed parts, or missing welds and adhesive bonds.
+- Functional defects: electronic or mechanical products that fail to perform their primary function from the moment of first use, or that fail within the warranty period under normal operating conditions.
+
+---
+
+SECTION 3 — WARRANTY DURATIONS BY PRODUCT CATEGORY
+
+| Category | Platform Guarantee | Typical Manufacturer Warranty |
+|---|---|---|
+| Electronics (phones, tablets, computers) | 30 days | 12 to 24 months |
+| Small electronics (headphones, chargers) | 30 days | 6 to 12 months |
+| Footwear | 30 days | 90 days for manufacturing defects |
+| Clothing and apparel | 30 days | Not typically provided |
+| Accessories (glasses, jewelry, bags) | 30 days | 90 days for manufacturing defects |
+| Home and kitchen | 30 days | 12 months for mechanical components |
+| Beauty | 30 days (sealed products only) | Not typically provided |
+
+---
+
+SECTION 4 — WARRANTY CLAIM CONDITIONS
+
+A warranty claim is valid when:
+
+- The defect is a manufacturing defect as defined in Section 2.
+- The claim is submitted within the applicable warranty period.
+- The product has not been modified, repaired, or tampered with by an unauthorized party.
+- The product has been used in accordance with the manufacturer's instructions and intended purpose.
+- The damage is not the result of accidental damage, misuse, exposure to inappropriate conditions, or normal wear and tear.
+
+---
+
+SECTION 5 — WARRANTY CLAIM PROCESS
+
+A warranty claim follows the same process as a standard return request, with the following additions:
+
+- The customer must indicate in the return form that the claim is submitted as a warranty claim.
+- The customer must provide evidence that the defect is a manufacturing defect, not customer-caused damage. This may include photographs, a description of how the damage was discovered, and confirmation that the product was used normally.
+- For manufacturer warranty claims beyond 30 days, the customer must contact the manufacturer directly. The platform may assist in facilitating contact.
+
+---
+
+SECTION 6 — WARRANTY EXCLUSIONS
+
+The warranty does not cover:
+
+- Accidental damage: damage resulting from drops, impacts, liquid spills, or physical stress caused by the customer.
+- Cosmetic wear: scratches, scuffs, or discoloration resulting from normal use that do not affect product functionality.
+- Battery degradation in electronic products, which is a normal characteristic and not a defect.
+- Damage caused by unauthorized modifications or repairs.
+- Products used in conditions outside their specified operating environment (e.g., using a non-waterproof product in water).
+- Consumable components that are designed to be replaced during normal product lifecycle, such as printer cartridges, filter pads, or replaceable blades.
+
+---
+
+SECTION 7 — WARRANTY RESOLUTION OPTIONS
+
+When a warranty claim is approved, the customer may choose from the following resolution options, subject to availability:
+
+1. Full replacement: a new unit of the same product is shipped to the customer. The defective product must be returned within 14 days.
+2. Full refund: a refund of the full purchase price is issued in accordance with the refund policy.
+3. Repair: for products covered by manufacturer warranty, the manufacturer may offer a repair service. Repair timelines vary.
+
+The platform reserves the right to offer the most cost-effective resolution option when the customer's preferred option is not available.
+
+---
+
+SECTION 8 — LATENT DEFECTS
+
+A latent defect is a manufacturing defect that is not visible at the time of delivery but becomes apparent during normal use within the warranty period.
+
+Latent defects are eligible for warranty claims provided that:
+
+- The defect manifests within the warranty period.
+- The customer can demonstrate through description and evidence that the defect was not caused by misuse or accidental damage.
+- The defect is consistent with known failure modes for the product category.
+
+Examples of latent defects:
+- A hinge on eyeglasses that breaks after 2 weeks of normal use due to inadequate metal fatigue resistance.
+- A shoe sole that begins to separate after 3 uses due to inadequate adhesive bonding.
+- An electronic component that fails after 1 month under normal operating conditions due to a faulty capacitor.
+
+---
+
+SECTION 9 — WARRANTY AND REFUND INTERACTION
+
+A warranty claim approval entitles the customer to the resolution options in Section 7. If the customer selects a full refund, the refund is processed in accordance with the refund policy (full refund conditions). If a partial solution is offered and the customer disagrees, the claim is escalated to a human reviewer.
