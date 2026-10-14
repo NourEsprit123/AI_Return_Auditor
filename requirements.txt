@@ -8,3 +8,7 @@ pandas
 pillow
 requests
 
+
+fastapi
+uvicorn
+requests

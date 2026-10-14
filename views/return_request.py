@@ -139,10 +139,18 @@ def show_return_request():
                 "Order status",
                 [
                     "Delivered",
-                    "In transit",
-                    "Pending"
+                   
                 ]
             )
+
+            
+            delivery_date = st.date_input(
+                "Delivery date",
+                value=None,
+               format="DD/MM/YYYY",
+               help="Select the date when you received your order."
+)
+
 
     # =========================================================
     # RIGHT — IMAGE
@@ -243,7 +251,7 @@ def show_return_request():
             "### Review your information"
         )
 
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
 
         with col1:
 
@@ -265,6 +273,16 @@ def show_return_request():
                 "VALUE",
                 f"${purchase_price:.2f}"
             )
+
+
+        with col4:
+            
+            st.metric(
+                "DELIVERY DATE",
+                 delivery_date.strftime("%d/%m/%Y")
+                 if delivery_date
+                 else "—"
+    )
 
         st.write("")
 
@@ -369,6 +387,12 @@ def show_return_request():
                 st.session_state.description = (
                     description
                 )
+
+                st.session_state.delivery_date = (
+                  delivery_date.isoformat()
+                  if delivery_date
+                  else None
+)
 
                 # =================================================
                 # SAVE IMAGE AS BYTES
