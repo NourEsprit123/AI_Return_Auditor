@@ -503,6 +503,30 @@ The test validates:
 
 ---
 
+# 🧪 Test the Fiscal Stamp Detection Module
+
+Before integration into the main workflow, the fiscal stamp detection feature can be tested independently using an isolated Streamlit interface.
+
+### 1. Run the isolated interface
+
+To prevent port conflicts with the team's main application (running on port 8501), this module is configured to run on a dedicated port:
+
+```powershell
+streamlit run test_cachet_fiscal.py --server.port 8510
+```
+
+### 2. How to test
+
+- Open your browser at `http://localhost:8510`.
+- Drag and drop the synthetic test invoices located in the project root:
+
+  | File                      | Expected result                                      |
+  | ------------------------- | ---------------------------------------------------- |
+  | `devis_avec_cachet.jpg`   | ✅ Cachet fiscal détecté — Devis **VALIDE**          |
+  | `devis_sans_cachet.jpg`   | ❌ Aucun cachet fiscal détecté — Devis **INVALIDE**  |
+
+---
+
 # 📊 Example Vision Analysis
 
 For an image containing damaged eyeglasses and an unrelated customer description, the Vision Agent can produce structured information such as:
