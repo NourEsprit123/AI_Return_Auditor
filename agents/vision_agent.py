@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from google import genai
 from PIL import Image
 from pydantic import BaseModel, Field
+import json
 
 
 # ============================================================
@@ -24,6 +25,9 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 PROMPT_PATH = BASE_DIR / "prompts" / "vision_agent_v1.txt"
+ORDER_PROMPT_PATH = (
+    BASE_DIR / "prompts" / "order_extraction_v1.txt"
+)
 
 
 # ============================================================
@@ -91,6 +95,92 @@ class VisionAnalysis(BaseModel):
     uncertainty: str = Field(
         description="Important uncertainty or ambiguity."
     )
+
+
+# ============================================================
+# STRUCTURED ORDER EXTRACTION RESULT
+# ============================================================
+
+class OrderExtraction(BaseModel):
+
+    order_number: Optional[str] = Field(
+        default=None,
+        description="Order number exactly as printed."
+    )
+
+    customer_name: Optional[str] = Field(
+        default=None,
+        description="Customer name printed on the document."
+    )
+
+    order_date: Optional[str] = Field(
+        default=None,
+        description="Order date in YYYY-MM-DD format."
+    )
+
+    delivery_date: Optional[str] = Field(
+        default=None,
+        description="Delivery date in YYYY-MM-DD format."
+    )
+
+    product_name: Optional[str] = Field(
+        default=None,
+        description="Product name exactly as printed."
+    )
+
+    product_category: Optional[str] = Field(
+        default=None,
+        description="General product category."
+    )
+
+    quantity: Optional[int] = Field(
+        default=None,
+        description="Product quantity if explicitly available."
+    )
+
+    total_amount: Optional[float] = Field(
+        default=None,
+        description="Total order amount if clearly readable."
+    )
+
+    currency: Optional[str] = Field(
+        default=None,
+        description="Currency explicitly indicated on the document."
+    )
+
+    company_name: Optional[str] = Field(
+        default=None,
+        description="Company name printed on the document."
+    )
+
+    stamp_detected: bool = Field(
+        description=(
+            "Whether a visible company stamp or seal "
+            "appears in the document."
+        )
+    )
+
+    stamp_description: str = Field(
+        description=(
+            "Description of the visible stamp, or an explanation "
+            "if no stamp can be identified."
+        )
+    )
+
+    uncertain_fields: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Fields that are illegible, ambiguous, or cannot "
+            "be reliably extracted."
+        )
+    )
+
+    document_notes: str = Field(
+        description=(
+            "Relevant observations about document readability "
+            "and missing information."
+        )
+    )    
 
 
 # ============================================================
@@ -773,6 +863,62 @@ Return only the structured VisionAnalysis result.
         self.state.final_result = current_result
 
         return current_result
+
+
+
+        # ========================================================
+    # ORDER DOCUMENT EXTRACTION
+    # ========================================================
+
+    def extract_order_information(
+        self,
+        document_image: Image.Image,
+    ) -> OrderExtraction:
+        """
+        Extract order information from a document image.
+
+        This method is independent of the product damage
+        analysis pipeline.
+        """
+
+        if document_image is None:
+            raise ValueError("An order document image is required.")
+
+        if not ORDER_PROMPT_PATH.exists():
+            raise FileNotFoundError(
+                f"Order extraction prompt not found: "
+                f"{ORDER_PROMPT_PATH}"
+            )
+
+        prompt = ORDER_PROMPT_PATH.read_text(
+            encoding="utf-8"
+        )
+
+        image = document_image.convert("RGB")
+
+        response = self.client.models.generate_content(
+            model=self.active_model,
+            contents=[
+                prompt,
+                image,
+            ],
+            config={
+                "response_mime_type": "application/json",
+                "response_schema": OrderExtraction,
+            },
+        )
+
+        if getattr(response, "parsed", None) is not None:
+            return response.parsed
+
+        if getattr(response, "text", None):
+            return OrderExtraction.model_validate_json(
+                response.text
+            )
+
+        raise RuntimeError(
+            "Gemini returned an empty order extraction response."
+        )        
 
     # ========================================================
     # STATE ACCESS

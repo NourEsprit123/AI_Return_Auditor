@@ -17,6 +17,10 @@ class VisionRequest(BaseModel):
     customer_description: str = Field(min_length=1)
 
 
+class OrderExtractionRequest(BaseModel):
+    document_base64: str = Field(min_length=1)
+
+
 @app.post("/analyze")
 def analyze(request: VisionRequest):
     try:
@@ -57,3 +61,45 @@ def analyze(request: VisionRequest):
             status_code=500,
             detail="Vision analysis failed.",
         ) from exc
+
+
+@app.post("/extract-order")
+def extract_order(request: OrderExtractionRequest):
+    try:
+        document_bytes = base64.b64decode(
+            request.document_base64,
+            validate=True,
+        )
+
+        with Image.open(io.BytesIO(document_bytes)) as source:
+            source.load()
+            document_image = source.convert("RGB")
+
+        agent = VisionAgent()
+
+        result = agent.extract_order_information(
+            document_image=document_image
+        )
+
+        return {
+            "result": result.model_dump(),
+        }
+
+    except (binascii.Error, ValueError) as exc:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid document image data.",
+        ) from exc
+
+    except UnidentifiedImageError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail="The uploaded document is not a valid image.",
+        ) from exc
+
+    except Exception as exc:
+      print(f"[Order Extraction Error] {type(exc).__name__}: {exc}")
+      raise HTTPException(
+        status_code=500,
+        detail=f"Order extraction failed: {exc}",
+      ) from exc

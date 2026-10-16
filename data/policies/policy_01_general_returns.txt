@@ -1,0 +1,80 @@
+# TEST POLICY — GENERAL RETURNS
+
+**Policy ID:** TEST-GEN-001  
+**Version:** 1.0  
+**Status:** APPROVED FOR TESTING ONLY  
+**Effective Date:** 2026-01-01
+
+## 1. Purpose and Scope
+
+This policy defines general return conditions for products purchased through an e-commerce platform.
+
+It applies to all product categories, including electronics, clothing, footwear, furniture, household appliances, toys, accessories, and other consumer goods.
+
+Category-specific policies may supplement these general rules.
+
+## 2. Standard Return Window
+
+For testing purposes, a customer may request a standard return within 30 calendar days after the recorded delivery date.
+
+The return period begins on the recorded delivery date, not the order placement date.
+
+The system must not calculate a deadline if the delivery date is missing or invalid.
+
+## 3. Product Condition
+
+For a standard change-of-mind return, the product should be unused, in acceptable condition, and accompanied by its original packaging and accessories when applicable.
+
+The system must distinguish ordinary returns from claims involving alleged damage, incorrect items, or missing components.
+
+A damaged product must be assessed under the applicable damage policy rather than automatically rejected under standard return conditions.
+
+## 4. Return Eligibility
+
+A request within the standard return window may be considered eligible for further review when the applicable conditions are satisfied.
+
+Eligibility for review does not constitute final return acceptance or refund authorization.
+
+## 5. Requests Outside the Standard Window
+
+A request submitted more than 30 calendar days after delivery falls outside the standard return window.
+
+However, the system must not automatically reject claims involving alleged delivery damage, incorrect products, missing items, or possible exceptions.
+
+Such claims must be assessed against the relevant policies or referred for human review.
+
+## 6. Required Information
+
+The system should identify the following information when assessing a claim:
+
+- Order identifier
+- Product name or description
+- Recorded delivery date
+- Claim submission date, when available
+- Customer's reason for return
+- Product condition
+- Relevant photographs or other evidence
+
+Missing information must be explicitly identified.
+
+## 7. Conflicting Information
+
+If order information, delivery dates, customer descriptions, or evidence conflict, the system must not select an arbitrary value.
+
+The claim must be referred for clarification or human review.
+
+## 8. Policy Limitations
+
+If a specific return condition is not defined by this policy or another applicable approved policy, the system must not invent a rule.
+
+It must identify the missing rule and request human review.
+
+## 9. Refund Authorization
+
+This policy does not authorize automatic refunds.
+
+A human reviewer must confirm the claim before a refund is authorized.
+
+## 10. Disclaimer
+
+This document is a fictional policy created exclusively for software testing. It does not represent the official policy of any real retailer.

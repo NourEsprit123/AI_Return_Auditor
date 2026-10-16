@@ -1,0 +1,128 @@
+# TEST POLICY — PRODUCT CATEGORY-SPECIFIC GUIDANCE
+
+**Policy ID:** TEST-CAT-003  
+**Version:** 1.0  
+**Status:** APPROVED FOR TESTING ONLY  
+**Effective Date:** 2026-01-01
+
+## 1. Purpose and Scope
+
+This document provides supplementary assessment guidance for different product categories.
+
+The general return and damage policies remain applicable to every category.
+
+The guidance below helps identify relevant evidence. It does not create an automatic right to a refund or override another approved policy.
+
+## 2. Electronics and Digital Devices
+
+Examples include smartphones, laptops, tablets, monitors, cameras, and accessories.
+
+Relevant visible issues may include:
+
+- Cracked screens or housings
+- Broken connectors
+- Dents or scratches
+- Missing visible components
+- Damaged packaging
+
+Useful evidence may include a clear photograph of the damaged area and a wider photograph identifying the device.
+
+A photograph alone cannot establish whether an electronic device functions correctly.
+
+If a claim concerns a hidden internal defect or a functional failure that cannot be verified visually, request appropriate additional evidence or human review.
+
+## 3. Clothing and Textiles
+
+Examples include shirts, trousers, coats, dresses, bags, and other textile products.
+
+Relevant visible issues may include:
+
+- Tears or holes
+- Stains or discoloration
+- Damaged seams
+- Broken fasteners
+- Visible fabric defects
+
+Useful evidence may include a close-up of the defect and a wider photograph identifying the affected item.
+
+The system must not assume that a stain or tear occurred before delivery solely from its appearance.
+
+## 4. Footwear
+
+Examples include shoes, boots, sandals, and sports footwear.
+
+Relevant visible issues may include:
+
+- Cracks or tears
+- Damaged soles
+- Stains
+- Detached components
+- Visible manufacturing defects
+
+Useful evidence may include a close-up of the defect and a photograph identifying the affected shoe.
+
+Signs of use may complicate the assessment. If the evidence does not establish whether damage was present at delivery, request human review.
+
+## 5. Furniture and Home Products
+
+Examples include tables, chairs, shelves, beds, decorative products, and household furnishings.
+
+Relevant visible issues may include:
+
+- Broken or cracked components
+- Dents or scratches
+- Damaged surfaces
+- Deformation
+- Missing visible parts
+
+Useful evidence may include a photograph of the damage, a wider photograph of the item, and photographs of the packaging when relevant.
+
+If assembly, installation, or handling may have contributed to the damage, the system must not assign responsibility without sufficient evidence.
+
+## 6. Household Appliances
+
+Examples include refrigerators, washing machines, ovens, vacuum cleaners, and small appliances.
+
+Relevant visible issues may include:
+
+- Dents
+- Cracked housings
+- Broken external components
+- Damaged doors or handles
+- Damaged packaging
+
+A visual model cannot reliably establish all electrical, mechanical, or internal faults.
+
+For functional failures, safety-related issues, or suspected internal damage, request human review and appropriate technical assessment.
+
+## 7. Toys, Accessories, and Other Products
+
+Examples include toys, watches, jewelry, sports equipment, books, and miscellaneous consumer goods.
+
+The system should identify visible damage relevant to the specific item, such as cracks, tears, broken components, stains, or deformation.
+
+If the product category is unknown or the relevant defect cannot be assessed using the available evidence, request clarification or human review.
+
+## 8. Unknown or Unclassified Product Categories
+
+The system must not refuse to assess a claim solely because the product category is not listed in this document.
+
+It should apply the general policies and the relevant damage policy.
+
+If a category-specific rule is necessary but unavailable, the system must state that the rule was not found and request human review.
+
+## 9. Priority of Policies
+
+Use the following interpretation:
+
+1. Apply the general return policy where relevant.
+2. Apply the general damage-on-delivery policy when damage is reported.
+3. Consult category-specific guidance when it is relevant.
+4. Consult evidence, escalation, and refund policies.
+5. Refer unresolved or conflicting cases for human review.
+
+Category-specific guidance must not override an explicit rule in an applicable approved policy without a defined precedence rule.
+
+## 10. Disclaimer
+
+This document contains fictional testing guidance. It does not establish the actual return conditions of any retailer or manufacturer.

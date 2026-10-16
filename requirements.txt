@@ -11,4 +11,7 @@ requests
 
 fastapi
 uvicorn
-requests
+chromadb
+rank-bm25
+pypdf
+

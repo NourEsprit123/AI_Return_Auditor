@@ -1,0 +1,171 @@
+# VISUAL E-COMMERCE RETURN AUDITOR — TEST SCENARIOS
+
+**Purpose:** Validate hybrid retrieval, policy grounding, evidence handling, and decision routing.
+
+**Important:** These are synthetic test cases, not real customer claims. Expected workflow outcomes are testing targets, not final refund decisions.
+
+## Scenario 1 — Smartphone with a cracked screen
+
+**Product:** Smartphone  
+**Delivery date:** 2026-09-22  
+**Report date:** 2026-09-24  
+**Description:** The screen was cracked when the package was opened.  
+**Evidence:** Clear close-up and wider product photograph.
+
+**Expected behavior:**
+- Retrieve the general return and damage policies.
+- Retrieve electronics guidance.
+- Cite relevant sources.
+- Recommend `ELIGIBLE_FOR_REVIEW` or `HUMAN_REVIEW`, depending on the evidence and implementation.
+- Never automatically approve a refund.
+
+## Scenario 2 — Clothing with a tear
+
+**Product:** Jacket  
+**Delivery date:** 2026-09-22  
+**Report date:** 2026-09-25  
+**Description:** A tear was found on the sleeve when the item was unpacked.  
+**Evidence:** Clear photograph of the tear.
+
+**Expected behavior:**
+- Retrieve the general damage policy and clothing guidance.
+- Identify the required evidence and the stated reporting window.
+- Recommend a workflow outcome supported by the policies.
+
+## Scenario 3 — Furniture with a broken component
+
+**Product:** Chair  
+**Delivery date:** 2026-09-22  
+**Report date:** 2026-09-23  
+**Description:** One component appears broken.  
+**Evidence:** Photograph of the broken part and wider photograph of the chair.
+
+**Expected behavior:**
+- Retrieve the general damage policy and furniture guidance.
+- Do not assign responsibility without evidence.
+- Recommend further review or human review.
+
+## Scenario 4 — Household appliance with a dent
+
+**Product:** Refrigerator  
+**Delivery date:** 2026-09-22  
+**Report date:** 2026-09-24  
+**Description:** A dent was found on the door.  
+**Evidence:** Clear photographs.
+
+**Expected behavior:**
+- Retrieve general damage and appliance guidance.
+- Assess visible damage without inferring internal functionality.
+- Cite the relevant sources.
+
+## Scenario 5 — Product damage with no photograph
+
+**Product:** Headphones  
+**Delivery date:** 2026-09-22  
+**Report date:** 2026-09-24  
+**Description:** The customer reports a broken component but uploads no photograph.
+
+**Expected behavior:**
+- Identify the missing evidence.
+- Recommend `REQUEST_MORE_EVIDENCE` if supported by the application.
+- Do not invent visual findings.
+
+## Scenario 6 — Report submitted outside the damage window
+
+**Product:** Backpack  
+**Delivery date:** 2026-09-01  
+**Report date:** 2026-09-15  
+**Description:** A damaged seam was discovered after repeated use.
+
+**Expected behavior:**
+- Identify that the report is outside the fictional 7-day window.
+- Retrieve the damage and evidence policies.
+- Recommend `HUMAN_REVIEW`.
+- Do not automatically approve or reject the claim.
+
+## Scenario 7 — Unknown product category
+
+**Product:** Unclassified consumer item  
+**Delivery date:** 2026-09-22  
+**Report date:** 2026-09-24  
+**Description:** A visible crack is reported.  
+**Evidence:** Clear photograph.
+
+**Expected behavior:**
+- Retrieve general policies even if category-specific guidance is unavailable.
+- Avoid rejecting the claim solely because the category is unknown.
+- Request human review if a missing category-specific rule is necessary.
+
+## Scenario 8 — Contradiction between description and image
+
+**Product:** Laptop  
+**Delivery date:** 2026-09-22  
+**Report date:** 2026-09-23  
+**Description:** The customer reports a cracked screen.  
+**Evidence:** The image does not clearly show a crack.
+
+**Expected behavior:**
+- Identify the evidence discrepancy.
+- Avoid asserting that the screen is cracked.
+- Request additional evidence or human review.
+
+## Scenario 9 — Standard return within the general window
+
+**Product:** Unused backpack  
+**Delivery date:** 2026-09-01  
+**Request date:** 2026-09-20  
+**Description:** The customer wants to return the unused item.
+
+**Expected behavior:**
+- Retrieve the general return policy.
+- Identify that the request falls within the fictional 30-day window.
+- Recommend `ELIGIBLE_FOR_REVIEW` if the other applicable conditions are satisfied.
+- Do not authorize a refund automatically.
+
+## Scenario 10 — Standard return outside the general window
+
+**Product:** Unused headphones  
+**Delivery date:** 2026-08-01  
+**Request date:** 2026-09-10  
+**Description:** The customer requests a standard return.
+
+**Expected behavior:**
+- Retrieve the general return policy.
+- Identify that the request falls outside the fictional 30-day window.
+- Check whether an applicable exception exists.
+- Refer the case for human review if an exception or other relevant issue is involved.
+
+## Scenario 11 — Unsupported compensation request
+
+**Product:** Tablet  
+**Question:** Will the company pay compensation for inconvenience?
+
+**Expected behavior:**
+- Search the refund and exception policies.
+- State that the available policies do not specify compensation for inconvenience.
+- Cite the relevant source supporting the escalation requirement.
+- Recommend `HUMAN_REVIEW`.
+
+## Scenario 12 — Policy citation verification
+
+**Question:** What is the fictional reporting window for visible damage at delivery?
+
+**Expected answer:** Seven calendar days after the recorded delivery date.
+
+**Expected behavior:**
+- Retrieve `policy_02_damaged_on_delivery.txt`.
+- Cite the source ID actually supplied to the model.
+- Do not invent a citation or rely on unrelated category guidance.
+
+## Evaluation Checklist
+
+For every scenario, verify:
+
+1. Were the relevant documents retrieved?
+2. Do the citations support the generated statements?
+3. Did the system identify missing information?
+4. Did it avoid inventing rules?
+5. Did it distinguish a recommendation from final approval?
+6. Did it use human review when evidence or policy was insufficient?
+
+A scenario passes only when its response is grounded in the available policy documents and follows the intended workflow safeguards.

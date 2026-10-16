@@ -272,7 +272,7 @@ def show_ai_analysis():
                         response = requests.post(
                             N8N_WEBHOOK_URL,
                             json=payload,
-                            timeout=180,
+                            timeout=360,
                         )
                         response.raise_for_status()
                         data = response.json()

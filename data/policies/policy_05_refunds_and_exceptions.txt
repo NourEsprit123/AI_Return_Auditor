@@ -1,0 +1,90 @@
+# TEST POLICY — REFUNDS, REPLACEMENTS, AND EXCEPTIONS
+
+**Policy ID:** TEST-REF-005  
+**Version:** 1.0  
+**Status:** APPROVED FOR TESTING ONLY  
+**Effective Date:** 2026-01-01
+
+## 1. Purpose and Scope
+
+This policy describes the handling of refund and replacement requests after a claim has been assessed.
+
+It applies to all product categories.
+
+## 2. Refund Authorization
+
+An automated system may summarize evidence and recommend a workflow outcome.
+
+A refund must not be authorized or executed solely on the basis of an AI-generated recommendation.
+
+A human reviewer must approve the claim before a refund is authorized.
+
+The application must distinguish between:
+
+- A claim recommended for review
+- A claim approved by an authorized reviewer
+- A refund actually processed
+
+These statuses must not be treated as equivalent.
+
+## 3. Replacement Requests
+
+A customer may request a replacement instead of a refund.
+
+The application may record this preference and present it to the reviewer.
+
+The application must not promise a replacement unless the applicable approved policy authorizes it and the required human approval has been obtained.
+
+If replacement eligibility or availability is not specified in the retrieved documents, request human review.
+
+## 4. Refund Method
+
+For testing purposes, an approved refund should normally be returned through the original payment method.
+
+If that method is unavailable or the customer disputes the proposed method, request human review.
+
+The system must not collect or expose unnecessary payment credentials.
+
+## 5. Processing Time
+
+For testing purposes only, a reviewer-approved refund may have an estimated processing period of 5 to 10 business days.
+
+This is a fictional estimate, not a guarantee.
+
+The system must not promise a processing date unless a reliable, applicable source provides it.
+
+## 6. Exceptions
+
+Human review is required for cases involving:
+
+- Requests outside the standard return window
+- Uncertain or disputed delivery information
+- Missing or contradictory evidence
+- Requests for exceptions to policy
+- Conflicting order or payment records
+- Unspecified replacement or compensation conditions
+- Suspected misuse or other circumstances requiring investigation
+
+The application must not invent exception criteria.
+
+## 7. Compensation and Additional Benefits
+
+If a customer requests compensation, store credit, a discount, or another benefit not covered by the retrieved policies, the system must state that the available policy does not specify the applicable conditions.
+
+The case must be referred for human review.
+
+## 8. Refund Status Tracking
+
+The application must not report a refund as completed unless a trusted business system confirms that the transaction was processed.
+
+A recommendation from Gemini is not proof of payment or refund execution.
+
+## 9. Policy Conflicts
+
+If this policy conflicts with another applicable policy and no precedence rule is defined, the application must not resolve the conflict by guessing.
+
+It must identify the conflict and request human review.
+
+## 10. Disclaimer
+
+This document contains fictional rules created exclusively for application testing. The timelines, procedures, and conditions must not be presented as official business policy.
