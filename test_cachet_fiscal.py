@@ -4,7 +4,7 @@ Validation de cachet fiscal sur devis.
 Fonctionnalité isolée — SAV e-commerce.
 Branche : feature/detection-cachet-fiscal
 
-Stack : google.genai (Gemini) + PIL + pydantic + streamlit
+Stack : google.genai (Gemini) + PIL + PyMuPDF + pydantic + streamlit
 Aucun import depuis les autres modules du projet.
 """
 
@@ -15,6 +15,7 @@ import time
 from pathlib import Path
 from typing import Optional
 
+import pymupdf as fitz              # PDF → PIL Image (page 0), PyMuPDF ≥ 1.24
 from dotenv import load_dotenv
 from google import genai
 from PIL import Image
@@ -54,27 +55,26 @@ RETRY_DELAY_SECONDS: int = 3
 # ============================================================
 
 STAMP_DETECTION_PROMPT = """
-Tu es un expert en validation de documents fiscaux pour un service après-vente.
+You are a Fiscal Audit Agent. You are analyzing a digital PDF invoice converted into an image.
 
-Analyse cette image de devis et détermine si un cachet fiscal officiel est présent.
+Look closely at the bottom-right corner of the document:
 
-Un cachet fiscal valide présente AU MOINS deux des caractéristiques suivantes :
-- Forme : rond, ovale ou rectangulaire
-- Couleur d'encre : bleue, rouge, noire ou violette
-- Contenu visible : numéro de registre du commerce, numéro fiscal, adresse de l'entreprise, logo ou nom officiel
-- Aspect physique : bords nets ou légèrement baveux (tampon encreur), éventuellement incliné
+- If you see a colored rectangular box containing the text "STATE TAX AUTHORITY - OFFICIAL FISCAL STAMP", you MUST detect this as a valid fiscal stamp and return that the stamp is PRESENT.
 
-Ne confonds pas avec :
-- Une signature manuscrite seule
-- Un en-tête imprimé ou logo numérique
-- Un filigrane ou une watermark
+- If that specific coordinate area is blank, return that the stamp is ABSENT.
 
-Réponds UNIQUEMENT avec un objet JSON valide (pas de markdown, pas de texte avant ou après), respectant ce schéma :
+Additional context for ambiguous documents:
+- The stamp box may also contain a reference number (e.g. "Ref. FISC-2026-XXXXXX") and a validation date.
+- The box border color is typically dark blue.
+- Do NOT confuse a printed header, logo, or watermark anywhere else on the page with the fiscal stamp.
+- Only the bottom-right rectangular box qualifies as the official fiscal stamp for this audit system.
+
+Respond ONLY with a valid JSON object (no markdown, no text before or after), following this exact schema:
 {
   "stamp_detected": true | false,
-  "confidence": <float entre 0.0 et 1.0>,
-  "visual_evidence": "<description précise de ce que tu observes dans l'image>",
-  "uncertainty": "<ambiguïté ou limite éventuelle de l'analyse>"
+  "confidence": <float between 0.0 and 1.0>,
+  "visual_evidence": "<precise description of what you observe in the bottom-right area>",
+  "uncertainty": "<any ambiguity or limitation of the analysis>"
 }
 """
 
@@ -147,14 +147,15 @@ def _parse_stamp_analysis(raw_text: str) -> StampAnalysis:
 # FONCTION PRINCIPALE
 # ============================================================
 
-def validate_invoice_stamp(image_path: str) -> bool:
+def validate_invoice_stamp(image: Image.Image) -> bool:
     """
     Détecte la présence d'un cachet fiscal sur un devis.
 
     Parameters
     ----------
-    image_path : str
-        Chemin vers l'image du devis (JPG, JPEG ou PNG).
+    image : PIL.Image.Image
+        Image de la page du devis, déjà convertie en mémoire
+        (typiquement la page 0 d'un PDF via pdf_page_to_image()).
 
     Returns
     -------
@@ -166,8 +167,6 @@ def validate_invoice_stamp(image_path: str) -> bool:
     ------
     ValueError
         Si la clé API Gemini n'est pas configurée.
-    FileNotFoundError
-        Si le fichier image est introuvable.
     RuntimeError
         Si l'analyse échoue après tous les retries.
     """
@@ -175,12 +174,6 @@ def validate_invoice_stamp(image_path: str) -> bool:
         raise ValueError(
             "La variable d'environnement GEMINI_API_KEY n'est pas configurée."
         )
-
-    path = Path(image_path)
-    if not path.exists():
-        raise FileNotFoundError(f"Image introuvable : {image_path}")
-
-    image = Image.open(path)
 
     client = genai.Client(api_key=API_KEY)
 
@@ -228,32 +221,39 @@ if __name__ == "__main__":
     st.set_page_config(
         page_title="Validation Cachet Fiscal",
         page_icon="🔍",
-        layout="centered",
+        layout="wide",
     )
 
     st.title("🔍 Validation Cachet Fiscal")
     st.caption("Outil de vérification de devis — SAV e-commerce")
 
     st.markdown(
-        "Chargez un devis pour détecter automatiquement la présence "
-        "d'un **cachet fiscal officiel**."
+        "Chargez un devis **PDF** pour détecter automatiquement la présence "
+        "d'un **cachet fiscal officiel**. La première page est analysée."
     )
 
     st.divider()
 
     uploaded_file = st.file_uploader(
-        "Charger un devis",
-        type=["jpg", "jpeg", "png"],
-        help="Formats acceptés : JPG, JPEG, PNG",
+        "Charger un devis (PDF)",
+        type=["pdf"],
+        help="Format accepté : PDF numérique (page 0 analysée, DPI 150).",
     )
 
     if uploaded_file is not None:
 
-        # Aperçu de l'image chargée
-        image_preview = Image.open(uploaded_file)
+        # ── PDF → PIL Image (page 0 en mémoire, sans fichier tmp) ────────
+        pdf_bytes = uploaded_file.read()
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        page = doc.load_page(0)
+        pix = page.get_pixmap(dpi=150)
+        img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+        doc.close()
+
+        # Aperçu de la page convertie
         st.image(
-            image_preview,
-            caption=f"Devis chargé : {uploaded_file.name}",
+            img,
+            caption=f"Page 1 — {uploaded_file.name}",
             use_container_width=True,
         )
 
@@ -261,14 +261,9 @@ if __name__ == "__main__":
 
         if st.button("🔎 Analyser le cachet fiscal", type="primary"):
 
-            # Sauvegarder temporairement le fichier pour validate_invoice_stamp
-            tmp_path = Path(f"_tmp_{uploaded_file.name}")
-
             try:
-                tmp_path.write_bytes(uploaded_file.getvalue())
-
                 with st.spinner("Analyse en cours via Gemini Vision..."):
-                    is_valid = validate_invoice_stamp(str(tmp_path))
+                    is_valid = validate_invoice_stamp(img)
 
                 if is_valid:
                     st.success(
@@ -282,24 +277,16 @@ if __name__ == "__main__":
                         icon="❌",
                     )
 
-            except FileNotFoundError as e:
-                st.error(f"Fichier introuvable : {e}")
-
             except ValueError as e:
                 st.error(f"Erreur de configuration : {e}")
 
             except RuntimeError as e:
                 st.error(f"Erreur d'analyse : {e}")
 
-            finally:
-                # Nettoyage du fichier temporaire
-                if tmp_path.exists():
-                    tmp_path.unlink()
-
     else:
         st.info(
-            "⬆️ Chargez un devis ci-dessus pour commencer l'analyse.",
-            icon="ℹ️",
+            "Chargez un devis ci-dessus pour commencer l'analyse.",
+            icon="⬆️",
         )
 
     st.divider()

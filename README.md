@@ -503,6 +503,28 @@ The test validates:
 
 ---
 
+# 🖨️ Test the PDF Fiscal Stamp Vision Pipeline (Upgraded POC)
+
+The fiscal stamp agent has been upgraded to handle digital PDF invoices natively using a visual pixel-rasterization layer (`PyMuPDF/fitz`) before passing data to the Gemini Vision Transformer.
+
+## 1. Compile both test artifact PDF variations
+
+```powershell
+python generate_fiscal_invoice.py
+```
+
+## 2. Launch the isolated visual app on port 8510
+
+```powershell
+streamlit run test_cachet_fiscal.py --server.port 8510
+```
+
+## 3. How to test
+
+Drag and drop `invoice_with_fiscal_stamp.pdf` to see a positive approval validation, or `invoice_without_fiscal_stamp.pdf` to verify the automated fallback rejection.
+
+---
+
 # 🧪 Test the Fiscal Stamp Detection Module
 
 Before integration into the main workflow, the fiscal stamp detection feature can be tested independently using an isolated Streamlit interface.
