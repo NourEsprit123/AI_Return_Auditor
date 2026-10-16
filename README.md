@@ -2,194 +2,306 @@
 
 > **Visual E-Commerce Return & Refund Auditor**
 
-AI Return Auditor is an AI-powered system designed to automate and assist the verification of e-commerce return and refund claims.
+AI Return Auditor is an AI-powered system designed to automate and
+assist the verification of e-commerce return and refund claims.
 
-The system combines **Multimodal AI, Computer Vision, Retrieval-Augmented Generation (RAG), decision guardrails, automation, and Human-in-the-Loop** to analyze customer claims and provide transparent, evidence-based decisions.
+The system combines **Multimodal AI, Computer Vision,
+Retrieval-Augmented Generation (RAG), decision guardrails, automation,
+and Human-in-the-Loop** to analyze customer claims and provide
+transparent, evidence-based decisions.
 
 ---
 
 ## 🎯 Project Overview
 
-When a customer requests a product return, the platform needs to determine whether the claim is consistent with the provided evidence and the company's return policy.
+When a customer requests a product return, the platform needs to
+determine whether the claim is consistent with the provided evidence and
+the company's return policy.
 
-AI Return Auditor aims to automate this process through a multi-agent architecture.
+AI Return Auditor aims to automate this process through a multi-agent
+architecture.
 
 The system analyzes:
 
-* 📷 Product images
-* 📝 Customer descriptions
-* 📦 Order information
-* 📚 Return and refund policies
-* 🤖 AI-generated visual evidence
-* 🛡️ Decision rules and guardrails
+-   📷 Product images
+
+-   📝 Customer descriptions
+
+-   📦 Order information
+
+-   📚 Return and refund policies
+
+-   🤖 AI-generated visual evidence
+
+-   🛡️ Decision rules and guardrails
 
 The final result can be:
 
-* ✅ **APPROVED**
-* ⚠️ **HUMAN REVIEW**
+-   ✅ **APPROVED**
 
-The system does not blindly trust the AI. Claims with uncertainty, inconsistencies, or insufficient evidence can be escalated to a human reviewer.
+-   ⚠️ **HUMAN REVIEW**
+
+The system does not blindly trust the AI. Claims with uncertainty,
+inconsistencies, or insufficient evidence can be escalated to a human
+reviewer.
 
 ---
 
 # 🏗️ Architecture
 
-The project follows a **multi-agent architecture** composed of three specialized AI agents.
+The project follows a **multi-agent architecture** composed of three
+specialized AI agents.
 
-```text
-                         ┌──────────────────────┐
-                         │       Customer       │
-                         │  Return Request      │
-                         └──────────┬───────────┘
-                                    │
-                       Image + Description
-                                    │
-                                    ▼
-                    ┌───────────────────────────┐
-                    │       Agent 1             │
-                    │  Multimodal Vision Agent  │
-                    └─────────────┬─────────────┘
-                                  │
-                       Visual Evidence
-                                  │
-                                  ▼
-                    ┌───────────────────────────┐
-                    │       Agent 2             │
-                    │       Policy RAG          │
-                    └─────────────┬─────────────┘
-                                  │
-                         Relevant Policies
-                                  │
-                                  ▼
-                    ┌───────────────────────────┐
-                    │       Agent 3             │
-                    │ Claim Evaluator +          │
-                    │ Decision Guardrails        │
-                    └─────────────┬─────────────┘
-                                  │
-                         ┌────────┴────────┐
-                         ▼                 ▼
-                    ✅ APPROVED       ⚠️ ESCALATED
-                                           │
-                                           ▼
-                                  ┌────────────────┐
-                                  │ Human Review   │
-                                  └────────────────┘
+``` text
+
+                         ┌──────────────────────┐
+
+                         │       Customer       │
+
+                         │  Return Request      │
+
+                         └──────────┬───────────┘
+
+                                    │
+
+                       Image + Description
+
+                                    │
+
+                                    ▼
+
+                    ┌───────────────────────────┐
+
+                    │       Agent 1             │
+
+                    │  Multimodal Vision Agent  │
+
+                    └─────────────┬─────────────┘
+
+                                  │
+
+                       Visual Evidence
+
+                                  │
+
+                                  ▼
+
+                    ┌───────────────────────────┐
+
+                    │       Agent 2             │
+
+                    │       Policy RAG          │
+
+                    └─────────────┬─────────────┘
+
+                                  │
+
+                         Relevant Policies
+
+                                  │
+
+                                  ▼
+
+                    ┌───────────────────────────┐
+
+                    │       Agent 3             │
+
+                    │ Claim Evaluator +          │
+
+                    │ Decision Guardrails        │
+
+                    └─────────────┬─────────────┘
+
+                                  │
+
+                         ┌────────┴────────┐
+
+                         ▼                 ▼
+
+                    ✅ APPROVED       ⚠️ ESCALATED
+
+                                           │
+
+                                           ▼
+
+                                  ┌────────────────┐
+
+                                  │ Human Review   │
+
+                                  └────────────────┘
 ```
 
 ---
 
 # 🤖 AI Agents
 
-## Agent 1 — Multimodal Product Damage Analyzer
+## Agent 1 --- Multimodal Product Damage Analyzer
 
-The first agent analyzes the product image together with the customer's textual description.
+The first agent analyzes the product image together with the customer's
+textual description.
 
 ### Input
 
-* Product image
-* Customer description
+-   Product image
+
+-   Customer description
 
 ### Responsibilities
 
 The agent identifies:
 
-* Product category
-* Product type
-* Visible damage
-* Damage location
-* Damage severity
-* Visual evidence
-* Confidence score
-* Description/image consistency
-* Uncertainty
+-   Product category
+
+-   Product type
+
+-   Visible damage
+
+-   Damage location
+
+-   Damage severity
+
+-   Visual evidence
+
+-   Confidence score
+
+-   Description/image consistency
+
+-   Uncertainty
 
 ### Example
 
-```text
+``` text
+
 Image:
+
 Broken eyeglasses
 
+
+
 Customer description:
+
 "The shoes arrived with a stain."
 ```
 
-The agent detects that the visual evidence does not correspond to the customer's description.
+The agent detects that the visual evidence does not correspond to the
+customer's description.
 
 ### Technology
 
-* Gemini 3.1 Flash Lite
-* Google Gemini API
-* Multimodal AI
-* Computer Vision
-* Prompt Engineering
-* Pydantic Structured Output
-* Pillow
+-   Gemini 3.1 Flash Lite
 
-The agent **does not approve or reject the claim**. Its role is to provide structured visual evidence to the following agents.
+-   Google Gemini API
+
+-   Multimodal AI
+
+-   Computer Vision
+
+-   Prompt Engineering
+
+-   Pydantic Structured Output
+
+-   Pillow
+
+The agent **does not approve or reject the claim**. Its role is to
+provide structured visual evidence to the following agents.
 
 ---
 
-## Agent 2 — Policy RAG Agent
+## Agent 2 --- Policy RAG Agent
 
-The second agent retrieves the most relevant return, refund, and warranty policies from the project's knowledge base.
+The second agent retrieves the most relevant return, refund, and
+warranty policies from the project's knowledge base.
 
 ### Responsibilities
 
-* Retrieve relevant policy documents
-* Search the knowledge base
-* Rank relevant chunks
-* Provide policy evidence
-* Ground the final decision in company rules
+-   Retrieve relevant policy documents
+
+-   Search the knowledge base
+
+-   Rank relevant chunks
+
+-   Provide policy evidence
+
+-   Ground the final decision in company rules
 
 ### RAG pipeline
 
-```text
+``` text
+
 Policy Documents
-       │
-       ▼
+
+       │
+
+       ▼
+
 Document Processing
-       │
-       ▼
+
+       │
+
+       ▼
+
 Chunking
-       │
-       ▼
+
+       │
+
+       ▼
+
 Embeddings
-       │
-       ▼
+
+       │
+
+       ▼
+
 Vector Store
-       │
-       ▼
+
+       │
+
+       ▼
+
 Similarity Search
-       │
-       ▼
+
+       │
+
+       ▼
+
 Top-K Relevant Chunks
-       │
-       ▼
+
+       │
+
+       ▼
+
 Policy Evidence
 ```
 
-The RAG component is designed to reduce unsupported AI decisions by grounding the evaluation in the project's policy knowledge base.
+The RAG component is designed to reduce unsupported AI decisions by
+grounding the evaluation in the project's policy knowledge base.
 
 ---
 
-## Agent 3 — Claim Evaluator & Decision Guardrails
+## Agent 3 --- Claim Evaluator & Decision Guardrails
 
 The third agent combines:
 
-* Order information
-* Customer description
-* Vision Agent results
-* Retrieved policies
-* Decision rules
+-   Order information
+
+-   Customer description
+
+-   Vision Agent results
+
+-   Retrieved policies
+
+-   Decision rules
 
 It produces a final recommendation.
 
 Possible outcomes:
 
-```text
+``` text
+
 APPROVED
-    or
+
+    or
+
 HUMAN REVIEW
 ```
 
@@ -197,12 +309,17 @@ HUMAN REVIEW
 
 The system can escalate a claim when:
 
-* Visual evidence is inconsistent with the description
-* AI confidence is too low
-* Required information is missing
-* Evidence is ambiguous
-* Policy conditions are not clearly satisfied
-* The claim presents a high-risk situation
+-   Visual evidence is inconsistent with the description
+
+-   AI confidence is too low
+
+-   Required information is missing
+
+-   Evidence is ambiguous
+
+-   Policy conditions are not clearly satisfied
+
+-   The claim presents a high-risk situation
 
 This ensures that uncertain cases are not automatically approved.
 
@@ -212,17 +329,24 @@ This ensures that uncertain cases are not automatically approved.
 
 Human review is an important safety mechanism.
 
-When the AI cannot make a sufficiently reliable decision, the claim is sent to a human reviewer.
+When the AI cannot make a sufficiently reliable decision, the claim is
+sent to a human reviewer.
 
 The reviewer can:
 
-* Approve the claim
-* Reject the claim
-* Request additional information
-* Add comments
-* Review AI evidence
-* Review retrieved policies
-* Inspect the decision reasoning
+-   Approve the claim
+
+-   Reject the claim
+
+-   Request additional information
+
+-   Add comments
+
+-   Review AI evidence
+
+-   Review retrieved policies
+
+-   Inspect the decision reasoning
 
 This creates a more trustworthy AI-assisted workflow.
 
@@ -232,32 +356,57 @@ This creates a more trustworthy AI-assisted workflow.
 
 The Streamlit application contains five main interfaces.
 
-```text
+``` text
+
 Home
-  │
-  ▼
+
+  │
+
+  ▼
+
 Return Request
-  │
-  ├── Order information
-  ├── Product information
-  ├── Customer description
-  └── Product image
-          │
-          ▼
-     AI Analysis
-          │
-          ├── Vision Agent
-          └── Policy RAG
-                  │
-                  ▼
-              Decision
-                  │
-          ┌───────┴────────┐
-          ▼                ▼
-      APPROVED        HUMAN REVIEW
-                           │
-                           ▼
-                    Reviewer decision
+
+  │
+
+  ├── Order information
+
+  ├── Product information
+
+  ├── Customer description
+
+  └── Product image
+
+          │
+
+          ▼
+
+     AI Analysis
+
+          │
+
+          ├── Vision Agent
+
+          └── Policy RAG
+
+                  │
+
+                  ▼
+
+              Decision
+
+                  │
+
+          ┌───────┴────────┐
+
+          ▼                ▼
+
+      APPROVED        HUMAN REVIEW
+
+                           │
+
+                           ▼
+
+                    Reviewer decision
 ```
 
 ## Application Interfaces
@@ -270,13 +419,19 @@ Presents the project and explains the AI verification workflow.
 
 Allows the customer or tester to provide:
 
-* Order ID
-* Product
-* Category
-* Purchase price
-* Delivery status
-* Product image
-* Customer description
+-   Order ID
+
+-   Product
+
+-   Category
+
+-   Purchase price
+
+-   Delivery status
+
+-   Product image
+
+-   Customer description
 
 ### 3. AI Analysis
 
@@ -284,18 +439,26 @@ Displays the analysis performed by the AI agents.
 
 For the Vision Agent, the interface displays:
 
-* Product type
-* Damage type
-* Damage location
-* Severity
-* Confidence
-* Visual evidence
-* Description consistency
-* Uncertainty
+-   Product type
+
+-   Damage type
+
+-   Damage location
+
+-   Severity
+
+-   Confidence
+
+-   Visual evidence
+
+-   Description consistency
+
+-   Uncertainty
 
 ### 4. Decision
 
-Displays the final AI recommendation based on the available evidence and policy.
+Displays the final AI recommendation based on the available evidence and
+policy.
 
 ### 5. Human Review
 
@@ -307,98 +470,152 @@ Provides a reviewer interface for claims requiring manual verification.
 
 ## Programming Language
 
-* **Python 3.11+**
+-   **Python 3.11+**
 
 ## Frontend / Interface
 
-* **Streamlit**
+-   **Streamlit**
 
 ## Artificial Intelligence
 
-* **Google Gemini API**
-* **Gemini 3.1 Flash Lite**
-* **Multimodal AI**
-* **Computer Vision**
-* **Prompt Engineering**
-* **Structured Output**
+-   **Google Gemini API**
+
+-   **Gemini 3.1 Flash Lite**
+
+-   **Multimodal AI**
+
+-   **Computer Vision**
+
+-   **Prompt Engineering**
+
+-   **Structured Output**
 
 ## RAG
 
-* Document processing
-* Chunking
-* Embeddings
-* Vector database
-* Similarity search
-* Top-K retrieval
-* Retrieval evaluation
+-   Document processing
+
+-   Chunking
+
+-   Embeddings
+
+-   Vector database
+
+-   Similarity search
+
+-   Top-K retrieval
+
+-   Retrieval evaluation
 
 ## Data Validation
 
-* **Pydantic**
+-   **Pydantic**
 
 ## Image Processing
 
-* **Pillow**
+-   **Pillow**
 
 ## Configuration
 
-* **python-dotenv**
+-   **python-dotenv**
 
 ## Automation
 
-* **n8n**
+-   **n8n**
 
 ## Development
 
-* Git
-* GitHub
-* Python virtual environment
+-   Git
+
+-   GitHub
+
+-   Python virtual environment
 
 ---
 
 # 📁 Project Structure
 
-```text
+``` text
+
 AI_Return_Auditor/
+
 │
+
 ├── agents/
-│   └── vision_agent.py
+
+│   └── vision_agent.py
+
 │
+
 ├── components/
-│   ├── styles.py
-│   ├── navbar.py
-│   └── cards.py
+
+│   ├── styles.py
+
+│   ├── navbar.py
+
+│   └── cards.py
+
 │
+
 ├── data/
-│   ├── policies/
-│   └── orders/
+
+│   ├── policies/
+
+│   └── orders/
+
 │
+
 ├── n8n/
-│   └── workflows/
+
+│   └── workflows/
+
 │
+
 ├── prompts/
-│   └── vision_agent_v1.txt
+
+│   └── vision_agent_v1.txt
+
 │
+
 ├── rag/
-│   ├── ingestion/
-│   ├── retrieval/
-│   └── vector_store/
+
+│   ├── ingestion/
+
+│   ├── retrieval/
+
+│   └── vector_store/
+
 │
+
 ├── services/
+
 │
+
 ├── views/
-│   ├── __init__.py
-│   ├── home.py
-│   ├── return_request.py
-│   ├── ai_analysis.py
-│   ├── decision.py
-│   └── human_review.py
+
+│   ├── \_\_init\_\_.py
+
+│   ├── home.py
+
+│   ├── return_request.py
+
+│   ├── ai_analysis.py
+
+│   ├── decision.py
+
+│   └── human_review\.py
+
 │
+
 ├── app.py
+
 ├── test_vision.py
+
 ├── requirements.txt
+
 ├── .env.example
+
 ├── .gitignore
+
 └── README.md
 ```
 
@@ -408,8 +625,10 @@ AI_Return_Auditor/
 
 Create a `.env` file in the project root.
 
-```env
+``` env
+
 GEMINI_API_KEY=your_gemini_api_key
+
 GEMINI_VISION_MODEL=gemini-3.1-flash-lite
 ```
 
@@ -417,10 +636,14 @@ GEMINI_VISION_MODEL=gemini-3.1-flash-lite
 
 The `.gitignore` file contains:
 
-```gitignore
+``` gitignore
+
 .env
+
 venv/
-__pycache__/
+
+\_\_pycache\_\_/
+
 *.pyc
 ```
 
@@ -430,8 +653,10 @@ __pycache__/
 
 ## 1. Clone the repository
 
-```bash
-git clone <repository-url>
+``` bash
+
+git clone \<repository-url>
+
 cd AI_Return_Auditor
 ```
 
@@ -439,19 +664,22 @@ cd AI_Return_Auditor
 
 ### Windows
 
-```powershell
+``` powershell
+
 python -m venv venv
 ```
 
 ## 3. Activate the environment
 
-```powershell
+``` powershell
+
 .\venv\Scripts\Activate.ps1
 ```
 
 ## 4. Install dependencies
 
-```powershell
+``` powershell
+
 pip install -r requirements.txt
 ```
 
@@ -459,69 +687,324 @@ pip install -r requirements.txt
 
 Create:
 
-```text
+``` text
+
 .env
 ```
 
 and add:
 
-```env
+``` env
+
 GEMINI_API_KEY=your_gemini_api_key
+
 GEMINI_VISION_MODEL=gemini-3.1-flash-lite
 ```
 
 ---
 
+## 6. Install and configure n8n (Windows)
+
+n8n is used to orchestrate the communication between the Streamlit
+interface and the Vision Agent API. It is installed separately from the
+Python dependencies.
+
+### 6.1 Prerequisites: Node.js and npm
+
+Open PowerShell and verify that Node.js and npm are available:
+
+``` powershell
+node --version
+npm --version
+```
+
+If either command is not recognized, install Node.js (npm is included),
+then open a new PowerShell terminal and run the commands again.
+
+### 6.2 Install n8n
+
+Install n8n globally with npm:
+
+``` powershell
+npm install -g n8n
+```
+
+Verify the installation:
+
+``` powershell
+n8n --version
+```
+
+Version used during this project's integration: **n8n 2.43.4**.
+
+### 6.3 Start n8n
+
+Start n8n from PowerShell:
+
+``` powershell
+n8n
+```
+
+Keep this terminal open while using the workflow. Open the n8n editor in
+a browser:
+
+http://localhost:5678
+
+Complete the initial setup if n8n prompts for it.
+
+### 6.4 Start the FastAPI Vision API
+
+Open a second PowerShell terminal:
+
+``` powershell
+cd D:\AI_Return_Auditor
+.\venv\Scripts\Activate.ps1
+python -m uvicorn api.vision_api:app --host 127.0.0.1 --port 8000
+```
+
+The API must remain running. n8n sends the analysis request to:
+
+``` text
+POST http://127.0.0.1:8000/analyze
+```
+
+The API receives `image_base64` and `customer_description`, decodes the
+image, invokes the Vision Agent, and returns the `result` and `state`
+objects.
+
+### 6.5 Create the n8n workflow
+
+Create a workflow named **AI Return Auditor - Vision Analysis** and add
+these nodes in order:
+
+``` text
+Webhook -> HTTP Request -> Respond to Webhook
+```
+
+#### Node 1 --- Webhook
+
+Configure the node as follows:
+
+-   **HTTP Method:** `POST`
+-   **Path:** `vision-analysis`
+-   **Authentication:** `None` for local development only
+-   **Respond:** `Using 'Respond to Webhook' Node`
+
+For test executions, the URL is:
+
+``` text
+http://localhost:5678/webhook-test/vision-analysis
+```
+
+Before sending a request to this test URL, click **Listen for Test
+Event** in the Webhook node.
+
+#### Node 2 --- HTTP Request
+
+Configure the node:
+
+-   **Method:** `POST`
+-   **URL:** `http://127.0.0.1:8000/analyze`
+-   **Body Content Type:** `JSON`
+
+Add these JSON body properties. Set each value to **Expression** mode:
+
+  Property                 Expression
+  ------------------------ -----------------------------------------
+  `image_base64`           `{{ $json.body.image_base64 }}`
+  `customer_description`   `{{ $json.body.customer_description }}`
+
+These expressions forward the image and customer description received by
+the Webhook node to FastAPI.
+
+#### Node 3 --- Respond to Webhook
+
+Configure the response as JSON and set the response body to the
+following expression:
+
+``` javascript
+{{ $json }}
+```
+
+Make sure the field is in **Expression** mode, not Fixed mode. Save the
+workflow.
+
+### 6.6 Connect Streamlit to n8n
+
+In `views/ai_analysis.py`, configure the webhook URL used by Streamlit:
+
+``` python
+N8N_WEBHOOK_URL = "http://localhost:5678/webhook-test/vision-analysis"
+```
+
+The application sends a JSON payload containing the Base64-encoded image
+and the customer's description:
+
+``` json
+{
+  "image_base64": "<Base64-encoded image>",
+  "customer_description": "<customer description>"
+}
+```
+
+The Streamlit handler should call the webhook with `requests.post(...)`
+and read `result` and `state` from the JSON response. It should not call
+`VisionAgent` directly when this n8n route is being used.
+
+### 6.7 Run and test the complete flow
+
+Use separate PowerShell terminals for the services.
+
+**Terminal 1 --- FastAPI:**
+
+``` powershell
+cd D:\AI_Return_Auditor
+.\venv\Scripts\Activate.ps1
+python -m uvicorn api.vision_api:app --host 127.0.0.1 --port 8000
+```
+
+**Terminal 2 --- n8n:**
+
+``` powershell
+n8n
+```
+
+Open http://localhost:5678, open the workflow, and click **Listen for
+Test Event**.
+
+**Terminal 3 --- Streamlit:**
+
+``` powershell
+cd D:\AI_Return_Auditor
+.\venv\Scripts\Activate.ps1
+streamlit run app.py
+```
+
+Then:
+
+1.  Open or create a return request.
+2.  Upload a product image and enter the customer's description.
+3.  Open **AI Analysis**.
+4.  Click **Run Vision Agent**.
+5.  Check that the Webhook, HTTP Request, and Respond to Webhook nodes
+    execute successfully.
+6.  Verify that Streamlit displays the returned analysis.
+
+Expected flow:
+
+``` text
+Streamlit
+   -> n8n Webhook
+   -> HTTP Request
+   -> FastAPI /analyze
+   -> VisionAgent
+   -> Google Gemini
+   -> n8n response
+   -> Streamlit results
+```
+
+### 6.8 Switch from test URL to production URL
+
+The `/webhook-test/` URL is for testing and requires **Listen for Test
+Event** to be active. After validating the workflow, activate it in n8n
+and update the URL in `views/ai_analysis.py` to:
+
+``` python
+N8N_WEBHOOK_URL = "http://localhost:5678/webhook/vision-analysis"
+```
+
+Save the file and test the application again.
+
+### 6.9 Troubleshooting
+
+-   **Connection refused on port 5678:** make sure n8n is running.
+-   **Connection refused on port 8000:** make sure FastAPI is running.
+-   **404 from the test webhook:** click **Listen for Test Event** and
+    verify the `vision-analysis` path.
+-   **Invalid JSON response:** verify that Respond to Webhook uses
+    `{{ $json }}` in Expression mode.
+-   **HTTP Request node error:** check the URL, `POST` method, and both
+    JSON expressions.
+-   **`requests` module not found:** activate the project's virtual
+    environment and run `python -m pip install requests`.
+
+> **Security:** this setup is intended for local development. Before
+> exposing the workflow to a network or the Internet, configure
+> authentication, protect API keys, and control access to customer
+> images and personal data.
+
 # ▶️ Run the Application
 
 Start Streamlit:
 
-```powershell
+``` powershell
+
 streamlit run app.py
 ```
 
 The application will open in the browser.
 
----
+**---**
 
-# 🧪 Test the Vision Agent
+**\# 🧪 Test the Vision Agent**
 
-Before launching the complete application, the Vision Agent can be tested independently.
+Before launching the complete application, the Vision Agent can be
+tested independently.
 
-```powershell
+``` powershell
+
 python test_vision.py
 ```
 
 The test validates:
 
-* Image loading
-* Gemini API connection
-* Multimodal analysis
-* Structured output
-* Pydantic validation
-* Customer description consistency
+-   Image loading
+
+-   Gemini API connection
+
+-   Multimodal analysis
+
+-   Structured output
+
+-   Pydantic validation
+
+-   Customer description consistency
 
 ---
 
 # 📊 Example Vision Analysis
 
-For an image containing damaged eyeglasses and an unrelated customer description, the Vision Agent can produce structured information such as:
+For an image containing damaged eyeglasses and an unrelated customer
+description, the Vision Agent can produce structured information such
+as:
 
-```json
+``` json
+
 {
-  "product_category": "Apparel & Accessories",
-  "product_type": "Eyeglasses",
-  "damage_type": "Broken / detached temple arm",
-  "damage_location": "Hinge / temple arm",
-  "severity": "High",
-  "confidence": 0.98,
-  "visual_evidence": "The image shows a pair of black eyeglasses with one temple arm completely detached.",
-  "description_consistency": "Inconsistent",
-  "uncertainty": "The customer's description does not correspond to the visual evidence."
+
+  "product_category": "Apparel & Accessories",
+
+  "product_type": "Eyeglasses",
+
+  "damage_type": "Broken / detached temple arm",
+
+  "damage_location": "Hinge / temple arm",
+
+  "severity": "High",
+
+  "confidence": 0.98,
+
+  "visual_evidence": "The image shows a pair of black eyeglasses with one temple arm completely detached.",
+
+  "description_consistency": "Inconsistent",
+
+  "uncertainty": "The customer's description does not correspond to the visual evidence."
+
 }
 ```
 
-This information is then available to the next stages of the verification workflow.
+This information is then available to the next stages of the
+verification workflow.
 
 ---
 
@@ -531,68 +1014,104 @@ Prompts are stored separately from the Python implementation.
 
 Example:
 
-```text
+``` text
+
 prompts/
+
 └── vision_agent_v1.txt
 ```
 
 The prompt defines:
 
-* Agent role
-* Responsibilities
-* Forbidden decisions
-* Expected output
-* Severity categories
-* Uncertainty handling
-* Evidence requirements
+-   Agent role
+
+-   Responsibilities
+
+-   Forbidden decisions
+
+-   Expected output
+
+-   Severity categories
+
+-   Uncertainty handling
+
+-   Evidence requirements
 
 Prompts are versioned to support experimentation and evaluation.
 
 Future versions can be compared using:
 
-```text
+``` text
+
 vision_agent_v1
+
 vision_agent_v2
+
 vision_agent_v3
 ```
 
-This allows the project to document prompt improvements and failure fixes.
+This allows the project to document prompt improvements and failure
+fixes.
 
 ---
 
 # 📚 RAG Knowledge Base
 
-The RAG system will use a dedicated knowledge base containing relevant information such as:
+The RAG system will use a dedicated knowledge base containing relevant
+information such as:
 
-* Return policies
-* Refund conditions
-* Warranty rules
-* Product categories
-* Return deadlines
-* Damage conditions
-* Exceptions
+-   Return policies
+
+-   Refund conditions
+
+-   Warranty rules
+
+-   Product categories
+
+-   Return deadlines
+
+-   Damage conditions
+
+-   Exceptions
 
 The retrieval process is designed around:
 
-```text
+``` text
+
 Corpus
-  ↓
+
+  ↓
+
 Chunking
-  ↓
+
+  ↓
+
 Embedding
-  ↓
+
+  ↓
+
 Vector Store
-  ↓
+
+  ↓
+
 Query
-  ↓
+
+  ↓
+
 Top-K Retrieval
-  ↓
+
+  ↓
+
 Relevant Policy
-  ↓
+
+  ↓
+
 Decision Agent
 ```
 
-The project will also evaluate different chunking strategies and retrieval configurations to determine which approach provides the most relevant policy context.
+The project will also evaluate different chunking strategies and
+retrieval configurations to determine which approach provides the most
+relevant policy context.
 
 ---
 
@@ -602,23 +1121,37 @@ n8n is used as the **workflow orchestration and automation layer**.
 
 It is not considered an AI agent.
 
-Its role is to coordinate the workflow between the application and AI components.
+Its role is to coordinate the workflow between the application and AI
+components.
 
 Example:
 
-```text
+``` text
+
 Return Request
-      ↓
+
+      ↓
+
 n8n Workflow
-      ↓
+
+      ↓
+
 Vision Agent
-      ↓
+
+      ↓
+
 Policy RAG
-      ↓
+
+      ↓
+
 Decision Agent
-      ↓
+
+      ↓
+
 Decision
-      ↓
+
+      ↓
+
 Human Review if required
 ```
 
@@ -632,18 +1165,26 @@ The system is designed around the principle:
 
 Guardrails help prevent automatic decisions when:
 
-* Evidence is contradictory
-* Confidence is insufficient
-* The customer description does not match the image
-* Policy information is insufficient
-* Required data is missing
-* The claim is ambiguous
+-   Evidence is contradictory
+
+-   Confidence is insufficient
+
+-   The customer description does not match the image
+
+-   Policy information is insufficient
+
+-   Required data is missing
+
+-   The claim is ambiguous
 
 In such cases:
 
-```text
+``` text
+
 AI uncertainty
-      ↓
+
+      ↓
+
 Human Review
 ```
 
@@ -653,42 +1194,70 @@ Human Review
 
 This project demonstrates the integration of several modern AI concepts:
 
-* Multi-Agent Systems
-* Multimodal AI
-* Computer Vision
-* Large Language Models
-* Prompt Engineering
-* Retrieval-Augmented Generation
-* Embeddings
-* Vector Search
-* Structured AI Output
-* AI Guardrails
-* Human-in-the-Loop
-* Workflow Automation
-* Explainable AI
+-   Multi-Agent Systems
 
-The project also demonstrates how these technologies can be combined into a realistic e-commerce business use case.
+-   Multimodal AI
+
+-   Computer Vision
+
+-   Large Language Models
+
+-   Prompt Engineering
+
+-   Retrieval-Augmented Generation
+
+-   Embeddings
+
+-   Vector Search
+
+-   Structured AI Output
+
+-   AI Guardrails
+
+-   Human-in-the-Loop
+
+-   Workflow Automation
+
+-   Explainable AI
+
+The project also demonstrates how these technologies can be combined
+into a realistic e-commerce business use case.
 
 ---
 
 # 📌 Project Status
 
-| Component                        | Status                  |
-| -------------------------------- | ----------------------- |
-| Streamlit interface              | ✅ Implemented           |
-| Home interface                   | ✅ Implemented           |
-| Return Request                   | ✅ Implemented           |
-| Vision Agent                     | ✅ Implemented & tested  |
-| Multimodal image + text analysis | ✅ Implemented           |
-| Structured VisionAnalysis        | ✅ Implemented           |
-| Prompt versioning                | ✅ Started               |
-| Policy RAG                       | 🔄 In development       |
-| Decision Agent                   | 🔄 In development       |
-| Guardrails                       | 🔄 In development       |
-| n8n workflow                     | 🔄 In development       |
-| Human Review                     | ✅ Interface implemented |
-| Retrieval evaluation             | 🔄 Planned              |
-| End-to-end workflow              | 🔄 In development       |
+| Component                        \| Status                  \|
+
+| -------------------------------- \| ----------------------- \|
+
+| Streamlit interface              \| ✅ Implemented           \|
+
+| Home interface                   \| ✅ Implemented           \|
+
+| Return Request                   \| ✅ Implemented           \|
+
+| Vision Agent                     \| ✅ Implemented & tested  \|
+
+| Multimodal image + text analysis \| ✅ Implemented           \|
+
+| Structured VisionAnalysis        \| ✅ Implemented           \|
+
+| Prompt versioning                \| ✅ Started               \|
+
+| Policy RAG                       \| 🔄 In development       \|
+
+| Decision Agent                   \| 🔄 In development       \|
+
+| Guardrails                       \| 🔄 In development       \|
+
+| n8n workflow                     \| 🔄 In development       \|
+
+| Human Review                     \| ✅ Interface implemented \|
+
+| Retrieval evaluation             \| 🔄 Planned              \|
+
+| End-to-end workflow              \| 🔄 In development       \|
 
 ---
 
@@ -696,19 +1265,29 @@ The project also demonstrates how these technologies can be combined into a real
 
 The project follows a hybrid AI approach:
 
-```text
-              AI
-               │
-       ┌───────┴───────┐
-       │               │
-   High confidence   Uncertainty
-       │               │
-       ▼               ▼
-   Automatic        Human Review
-   decision
+``` text
+
+              AI
+
+               │
+
+       ┌───────┴───────┐
+
+       │               │
+
+   High confidence   Uncertainty
+
+       │               │
+
+       ▼               ▼
+
+   Automatic        Human Review
+
+   decision
 ```
 
-This approach improves reliability and reduces the risk of incorrect automated refund decisions.
+This approach improves reliability and reduces the risk of incorrect
+automated refund decisions.
 
 ---
 
@@ -716,18 +1295,29 @@ This approach improves reliability and reduces the risk of incorrect automated r
 
 Potential improvements include:
 
-* Advanced RAG retrieval
-* Reranking
-* Retrieval evaluation metrics
-* More return policy scenarios
-* Better decision explanations
-* Complete n8n automation
-* Audit logs
-* Prompt evaluation
-* Confidence calibration
-* Additional multimodal inputs
-* Analytics dashboard
-* Human reviewer feedback loop
+-   Advanced RAG retrieval
+
+-   Reranking
+
+-   Retrieval evaluation metrics
+
+-   More return policy scenarios
+
+-   Better decision explanations
+
+-   Complete n8n automation
+
+-   Audit logs
+
+-   Prompt evaluation
+
+-   Confidence calibration
+
+-   Additional multimodal inputs
+
+-   Analytics dashboard
+
+-   Human reviewer feedback loop
 
 ---
 
@@ -738,6 +1328,9 @@ Potential improvements include:
 **Domain:** E-Commerce / Artificial Intelligence
 
 **Main concepts:**
-Multimodal AI • Computer Vision • RAG • Multi-Agent Systems • Guardrails • Human-in-the-Loop • Workflow Automation
 
-**Built with:** Python • Streamlit • Gemini API • Pydantic • Pillow • n8n
+Multimodal AI • Computer Vision • RAG • Multi-Agent Systems • Guardrails
+• Human-in-the-Loop • Workflow Automation
+
+**Built with:** Python • Streamlit • Gemini API • Pydantic • Pillow •
+n8n
