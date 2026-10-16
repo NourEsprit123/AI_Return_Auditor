@@ -64,7 +64,7 @@ API_KEY = os.getenv("GEMINI_API_KEY")
 
 MODEL_NAME = os.getenv(
     "GEMINI_RAG_MODEL",
-    "gemini-2.0-flash-lite",
+    "gemini-3.5-flash",
 )
 
 MAX_MODEL_RETRIES = 2
@@ -299,8 +299,10 @@ Do NOT approve or reject the claim.
 
         models_to_try = [
             self.model_name,
-            "gemini-2.0-flash-lite",
-            "gemini-1.5-flash",
+            "gemini-3.5-flash",
+            "gemini-3.6-flash",
+            "gemini-3.7-flash",
+            "gemini-3.1-flash-lite",
         ]
 
         models_to_try = list(dict.fromkeys(models_to_try))

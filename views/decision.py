@@ -1,242 +1,157 @@
 import streamlit as st
 
 from components.styles import apply_styles
-from components.navbar import (
-    render_navbar,
-    render_navigation
-)
+from components.navbar import render_navbar, render_navigation
 
 
 def show_decision():
 
     apply_styles()
-
     render_navbar()
     render_navigation()
 
     st.write("")
 
-    # =========================================================
-    # PAGE HEADER
-    # =========================================================
-
-    st.caption(
-        "DECISION  /  STEP 03"
-    )
-
-    st.markdown(
-        "# Your claim has been evaluated."
-    )
-
+    st.caption("DECISION  /  STEP 03")
+    st.markdown("# Your claim has been evaluated.")
     st.write(
         "The AI system combined visual evidence, retrieved "
         "policy and decision guardrails to evaluate the claim."
     )
-
     st.write("")
 
     # =========================================================
-    # CLAIM DATA
+    # LOAD REAL DATA FROM SESSION STATE
     # =========================================================
 
-    order_id = st.session_state.get(
-        "order_id",
-        "45872"
-    )
+    order_id       = st.session_state.get("order_id", "—")
+    product_name   = st.session_state.get("product_name", "—")
+    purchase_price = float(st.session_state.get("purchase_price", 0.0))
 
-    product_name = st.session_state.get(
-        "product_name",
-        "Nike Pegasus 41"
-    )
+    vision   = st.session_state.get("vision_result", {})
+    rag      = st.session_state.get("rag_result", {})
+    decision = st.session_state.get("decision_result", {})
 
-    purchase_price = st.session_state.get(
-        "purchase_price",
-        120.0
-    )
+    # Check if pipeline has been run
+    pipeline_done = bool(vision and rag and decision)
 
     # =========================================================
     # STEP INDICATOR
     # =========================================================
 
-    col1, col2, col3, col4 = st.columns(
-        4
-    )
-
-    with col1:
-        st.success("✓ Request")
-
-    with col2:
-        st.success("✓ AI Analysis")
-
-    with col3:
-        st.success("✓ Decision")
-
-    with col4:
-        st.caption("○ Human Review")
+    col1, col2, col3, col4 = st.columns(4)
+    with col1: st.success("✓ Request")
+    with col2: st.success("✓ AI Analysis")
+    with col3: st.success("✓ Decision")
+    with col4: st.caption("○ Human Review")
 
     st.write("")
 
     # =========================================================
-    # MAIN DECISION
+    # NO PIPELINE RUN YET
+    # =========================================================
+
+    if not pipeline_done:
+        st.warning(
+            "⚠️ No AI analysis has been run yet. "
+            "Please go to AI Analysis first."
+        )
+        if st.button("← Go to AI Analysis", key="go_analysis"):
+            st.session_state.page = "AI Analysis"
+            st.rerun()
+        return
+
+    # =========================================================
+    # EXTRACT DECISION DATA
+    # =========================================================
+
+    dec       = decision.get("decision", "HUMAN_REVIEW")
+    dec_conf  = float(decision.get("confidence", 0))
+    risk      = decision.get("risk_level", "MEDIUM")
+    reason    = decision.get("reason", "—")
+    guardrail = decision.get("guardrail_hit", "None")
+    evidence  = decision.get("evidence_chain", [])
+
+    vision_conf     = float(vision.get("confidence", 0))
+    applicable_pol  = rag.get("applicable_policy", "—")
+    policy_summary  = rag.get("summary", "—")
+
+    # =========================================================
+    # MAIN DECISION CARD
     # =========================================================
 
     with st.container(border=True):
-
-        col1, col2 = st.columns(
-            [1.4, 0.6],
-            gap="large"
-        )
+        col1, col2 = st.columns([1.4, 0.6], gap="large")
 
         with col1:
+            st.caption("FINAL AI DECISION")
 
-            st.caption(
-                "FINAL AI DECISION"
-            )
-
-            st.markdown(
-                "# 🟢 RETURN APPROVED"
-            )
-
-            st.write(
-                "The available evidence and applicable policy "
-                "support the customer's return request."
-            )
-
-            st.write("")
-
-            st.success(
-                "✓ The claim satisfies the current verification criteria."
-            )
+            if dec == "APPROVED":
+                st.markdown("# 🟢 RETURN APPROVED")
+                st.write("The available evidence and applicable policy support the return request.")
+                st.write("")
+                st.success("✓ The claim satisfies all verification criteria.")
+            else:
+                st.markdown("# 🟠 HUMAN REVIEW REQUIRED")
+                st.write("The claim has been escalated for manual verification.")
+                st.write("")
+                st.warning(f"⚠ Reason: {reason}")
 
         with col2:
-
-            st.caption(
-                "CONFIDENCE"
-            )
-
-            st.markdown(
-                "# 89%"
-            )
-
-            st.progress(
-                0.89
-            )
-
-            st.caption(
-                "Overall decision confidence"
-            )
+            st.caption("CONFIDENCE")
+            st.markdown(f"# {dec_conf*100:.0f}%")
+            st.progress(max(0.0, min(dec_conf, 1.0)))
+            st.caption("Overall decision confidence")
 
     st.write("")
 
     # =========================================================
-    # DECISION METRICS
+    # METRICS
     # =========================================================
 
-    col1, col2, col3, col4 = st.columns(
-        4
-    )
-
-    with col1:
-
-        st.metric(
-            "DECISION",
-            "APPROVED"
-        )
-
-    with col2:
-
-        st.metric(
-            "CONFIDENCE",
-            "89%"
-        )
-
-    with col3:
-
-        st.metric(
-            "ORDER VALUE",
-            f"${purchase_price:.2f}"
-        )
-
-    with col4:
-
-        st.metric(
-            "RISK",
-            "LOW"
-        )
+    col1, col2, col3, col4 = st.columns(4)
+    with col1: st.metric("DECISION", dec)
+    with col2: st.metric("CONFIDENCE", f"{dec_conf*100:.0f}%")
+    with col3: st.metric("ORDER VALUE", f"${purchase_price:.2f}")
+    with col4: st.metric("RISK", risk)
 
     # =========================================================
-    # DECISION REASONS
+    # DECISION EXPLANATION
     # =========================================================
 
     st.write("")
     st.divider()
+    st.caption("DECISION EXPLANATION")
 
-    st.caption(
-        "DECISION EXPLANATION"
-    )
-
-    st.markdown(
-        "## Why was the claim approved?"
-    )
+    if dec == "APPROVED":
+        st.markdown("## Why was the claim approved?")
+    else:
+        st.markdown("## Why was the claim escalated?")
 
     st.write("")
 
-    col1, col2 = st.columns(
-        2,
-        gap="large"
-    )
+    col1, col2 = st.columns(2, gap="large")
 
     with col1:
-
         with st.container(border=True):
-
-            st.caption(
-                "01  /  VISUAL EVIDENCE"
-            )
-
-            st.markdown(
-                "### 👁️ Damage confirmed"
-            )
-
-            st.write(
-                """
-                The Vision Agent identified a visible stain
-                on the left shoe. The detected damage is
-                consistent with the customer's description.
-                """
-            )
-
+            st.caption("01  /  VISUAL EVIDENCE")
+            st.markdown("### 👁️ Vision Agent")
+            st.write(vision.get("visual_evidence", "—"))
             st.write("")
-
-            st.success(
-                "91% visual confidence"
-            )
+            sev = vision.get("severity", "Unknown")
+            consistency = vision.get("description_consistency", "")
+            if "inconsistent" in consistency.lower():
+                st.warning(f"⚠ {sev} severity — Inconsistent description")
+            else:
+                st.success(f"✓ {sev} severity — {vision_conf*100:.0f}% confidence")
 
     with col2:
-
         with st.container(border=True):
-
-            st.caption(
-                "02  /  POLICY EVIDENCE"
-            )
-
-            st.markdown(
-                "### 📚 Return policy applies"
-            )
-
-            st.write(
-                """
-                The retrieved policy indicates that products
-                received with visible defects or damage may
-                qualify for return within the applicable period.
-                """
-            )
-
+            st.caption("02  /  POLICY EVIDENCE")
+            st.markdown("### 📚 RAG Agent")
+            st.write(policy_summary[:300] + "..." if len(policy_summary) > 300 else policy_summary)
             st.write("")
-
-            st.success(
-                "94% policy relevance"
-            )
+            st.success(f"✓ {applicable_pol}")
 
     # =========================================================
     # GUARDRAILS
@@ -245,35 +160,23 @@ def show_decision():
     st.write("")
 
     with st.container(border=True):
-
-        st.caption(
-            "03  /  SAFETY GUARDRAILS"
-        )
-
-        st.markdown(
-            "### 🛡️ Verification checks"
-        )
-
-        st.write(
-            "Before producing the final decision, "
-            "the system verified the following conditions."
-        )
-
+        st.caption("03  /  SAFETY GUARDRAILS")
+        st.markdown("### 🛡️ Verification checks")
         st.write("")
 
-        checks = [
-            "Visual evidence is available",
-            "Customer description is consistent",
-            "Relevant policy was retrieved",
-            "Claim does not exceed the defined risk threshold",
-            "No immediate escalation condition detected"
-        ]
-
-        for check in checks:
-
-            st.success(
-                f"✓ {check}"
-            )
+        if guardrail == "None" or not guardrail:
+            checks = [
+                "Visual evidence is available",
+                "Customer description is consistent",
+                "Relevant policy was retrieved",
+                "Claim within risk threshold",
+                "No escalation condition detected",
+            ]
+            for check in checks:
+                st.success(f"✓ {check}")
+        else:
+            st.warning(f"⚠ Guardrail triggered: **{guardrail}**")
+            st.write(reason)
 
     # =========================================================
     # EVIDENCE CHAIN
@@ -281,149 +184,71 @@ def show_decision():
 
     st.write("")
     st.divider()
-
-    st.caption(
-        "DECISION TRACEABILITY"
-    )
-
-    st.markdown(
-        "## Evidence used by the system"
-    )
-
+    st.caption("DECISION TRACEABILITY")
+    st.markdown("## Evidence used by the system")
     st.write("")
 
-    col1, col2, col3 = st.columns(
-        3,
-        gap="large"
-    )
+    col1, col2, col3 = st.columns(3, gap="large")
 
     with col1:
-
         with st.container(border=True):
-
-            st.markdown(
-                "## 👁️"
-            )
-
-            st.caption(
-                "VISION AGENT"
-            )
-
-            st.markdown(
-                "Damage detected"
-            )
-
-            st.write(
-                "Stain · Left shoe · Medium"
-            )
-
-            st.metric(
-                "Confidence",
-                "91%"
-            )
+            st.markdown("## 👁️")
+            st.caption("VISION AGENT")
+            st.markdown(f"**{vision.get('product_type', '—')}**")
+            st.write(f"{vision.get('damage_type', '—')} · {vision.get('severity', '—')}")
+            st.metric("Confidence", f"{vision_conf*100:.0f}%")
 
     with col2:
-
         with st.container(border=True):
-
-            st.markdown(
-                "## 📚"
-            )
-
-            st.caption(
-                "RAG AGENT"
-            )
-
-            st.markdown(
-                "Policy retrieved"
-            )
-
-            st.write(
-                "Return & Refund Policy"
-            )
-
-            st.metric(
-                "Relevance",
-                "94%"
-            )
+            st.markdown("## 📚")
+            st.caption("RAG AGENT")
+            st.markdown(f"**{applicable_pol}**")
+            sources = rag.get("sources", [])
+            st.write(", ".join(sources) if sources else "—")
+            chunks = rag.get("chunks", [])
+            top_score = max((c.get("relevance_score", 0) for c in chunks), default=0)
+            st.metric("Top Relevance", f"{top_score:.2f}")
 
     with col3:
-
         with st.container(border=True):
-
-            st.markdown(
-                "## 🛡️"
-            )
-
-            st.caption(
-                "GUARDRAILS"
-            )
-
-            st.markdown(
-                "Risk evaluation"
-            )
-
-            st.write(
-                "Low risk · No escalation"
-            )
-
-            st.metric(
-                "Score",
-                "89%"
-            )
+            st.markdown("## 🛡️")
+            st.caption("GUARDRAILS")
+            st.markdown(f"**{risk} risk**")
+            st.write(f"Guardrail: {guardrail}")
+            st.metric("Decision Score", f"{dec_conf*100:.0f}%")
 
     # =========================================================
-    # ORDER SUMMARY
+    # EVIDENCE CHAIN LIST
+    # =========================================================
+
+    if evidence:
+        st.write("")
+        with st.container(border=True):
+            st.caption("FULL EVIDENCE CHAIN")
+            for e in evidence:
+                st.write(f"• {e}")
+
+    # =========================================================
+    # CLAIM SUMMARY
     # =========================================================
 
     st.write("")
     st.divider()
-
-    st.caption(
-        "CLAIM SUMMARY"
-    )
-
-    st.markdown(
-        "## Return request details"
-    )
-
+    st.caption("CLAIM SUMMARY")
+    st.markdown("## Return request details")
     st.write("")
 
     with st.container(border=True):
-
-        col1, col2, col3 = st.columns(
-            3
-        )
-
+        col1, col2, col3 = st.columns(3)
         with col1:
-
-            st.caption(
-                "ORDER ID"
-            )
-
-            st.markdown(
-                f"### {order_id}"
-            )
-
+            st.caption("ORDER ID")
+            st.markdown(f"### {order_id}")
         with col2:
-
-            st.caption(
-                "PRODUCT"
-            )
-
-            st.markdown(
-                f"### {product_name}"
-            )
-
+            st.caption("PRODUCT")
+            st.markdown(f"### {product_name}")
         with col3:
-
-            st.caption(
-                "REFUND VALUE"
-            )
-
-            st.markdown(
-                f"### ${purchase_price:.2f}"
-            )
+            st.caption("REFUND VALUE")
+            st.markdown(f"### ${purchase_price:.2f}")
 
     # =========================================================
     # FINAL ACTION
@@ -433,72 +258,30 @@ def show_decision():
     st.divider()
 
     with st.container(border=True):
+        st.caption("NEXT STEP")
 
-        st.caption(
-            "NEXT STEP"
-        )
-
-        st.markdown(
-            "### What would you like to do?"
-        )
-
-        st.write(
-            "The claim has been automatically approved. "
-            "You can finalize the process or send it "
-            "to a human reviewer for additional verification."
-        )
-
-        st.write("")
-
-        col1, col2 = st.columns(
-            2,
-            gap="large"
-        )
-
-        with col1:
-
-            if st.button(
-                "✓  Confirm approval",
-                use_container_width=True,
-                key="confirm_approval"
-            ):
-
-                st.session_state.decision_confirmed = True
-
-                st.success(
-                    "Return approval confirmed."
-                )
-
-        with col2:
-
-            if st.button(
-                "🧑‍💼  Send to human review",
-                use_container_width=True,
-                key="send_human_review"
-            ):
-
-                st.session_state.page = (
-                    "Human Review"
-                )
-
+        if dec == "APPROVED":
+            st.markdown("### What would you like to do?")
+            st.write("The claim has been automatically approved. You can confirm or send to human review.")
+            st.write("")
+            col1, col2 = st.columns(2, gap="large")
+            with col1:
+                if st.button("✓  Confirm approval", use_container_width=True, key="confirm_approval"):
+                    st.session_state.decision_confirmed = True
+                    st.success("Return approval confirmed.")
+            with col2:
+                if st.button("🧑‍💼  Send to human review", use_container_width=True, key="send_human_review"):
+                    st.session_state.page = "Human Review"
+                    st.rerun()
+        else:
+            st.markdown("### This claim requires human review.")
+            st.write("The AI detected an issue that requires manual verification.")
+            st.write("")
+            if st.button("🧑‍💼  Go to human review", use_container_width=True, key="go_human_review"):
+                st.session_state.page = "Human Review"
                 st.rerun()
 
-    # =========================================================
-    # CONFIRMATION
-    # =========================================================
-
-    if st.session_state.get(
-        "decision_confirmed",
-        False
-    ):
-
+    if st.session_state.get("decision_confirmed", False):
         st.write("")
-
-        st.success(
-            "✓ The return approval has been confirmed successfully."
-        )
-
-        st.info(
-            "The claim can now proceed to the final "
-            "customer-service workflow."
-        )
+        st.success("✓ The return approval has been confirmed successfully.")
+        st.info("The claim can now proceed to the final customer-service workflow.")

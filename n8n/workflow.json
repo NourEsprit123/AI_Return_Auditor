@@ -1,0 +1,194 @@
+{
+  "name": "AI Return Auditor — Full Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "return-claim",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "node_webhook",
+      "name": "Webhook — Receive Claim",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300],
+      "notes": "Entry point. Receives: image_base64, customer_description, order_id, product_name, product_category, purchase_price, delivery_status"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/analyze/vision",
+        "sendBody": true,
+        "specifyBody": "keypair",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "image_base64",          "value": "={{ $json.body.image_base64 }}" },
+            { "name": "customer_description",  "value": "={{ $json.body.customer_description }}" }
+          ]
+        },
+        "options": { "timeout": 120000 }
+      },
+      "id": "node_vision",
+      "name": "Agent 1 — Vision Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300],
+      "notes": "Multimodal damage analysis (Gemini). Returns: product_type, damage_type, severity, confidence, description_consistency, visual_evidence, uncertainty"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/analyze/rag",
+        "sendBody": true,
+        "specifyBody": "keypair",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "product_category",          "value": "={{ $json.product_category }}" },
+            { "name": "product_type",               "value": "={{ $json.product_type }}" },
+            { "name": "damage_type",                "value": "={{ $json.damage_type }}" },
+            { "name": "damage_location",            "value": "={{ $json.damage_location }}" },
+            { "name": "severity",                   "value": "={{ $json.severity }}" },
+            { "name": "confidence",                 "value": "={{ $json.confidence }}" },
+            { "name": "visual_evidence",            "value": "={{ $json.visual_evidence }}" },
+            { "name": "description_consistency",    "value": "={{ $json.description_consistency }}" },
+            { "name": "uncertainty",                "value": "={{ $json.uncertainty }}" }
+          ]
+        },
+        "options": { "timeout": 120000 }
+      },
+      "id": "node_rag",
+      "name": "Agent 2 — RAG Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 300],
+      "notes": "Modular RAG policy retrieval (ChromaDB + cross-encoder). Returns: applicable_policy, summary, sources, chunks"
+    },
+    {
+      "parameters": {
+        "jsCode": "const vision = $('Agent 1 — Vision Agent').item.json;\nconst rag    = $('Agent 2 — RAG Agent').item.json;\nconst claim  = $('Webhook — Receive Claim').item.json.body;\n\nreturn [{ json: {\n  product_category:        vision.product_category,\n  product_type:            vision.product_type,\n  damage_type:             vision.damage_type,\n  damage_location:         vision.damage_location,\n  severity:                vision.severity,\n  confidence:              vision.confidence,\n  visual_evidence:         vision.visual_evidence,\n  description_consistency: vision.description_consistency,\n  uncertainty:             vision.uncertainty,\n  rag_query:               rag.query,\n  applicable_policy:       rag.applicable_policy,\n  policy_summary:          rag.summary,\n  policy_sources:          rag.sources,\n  policy_chunks:           rag.chunks,\n  retrieval_successful:    rag.retrieval_successful,\n  order_id:                claim.order_id,\n  product_name:            claim.product_name,\n  product_category_order:  claim.product_category,\n  purchase_price:          claim.purchase_price,\n  delivery_status:         claim.delivery_status\n}}];"
+      },
+      "id": "node_merge",
+      "name": "Merge — Vision + RAG + Claim",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [980, 300],
+      "notes": "Combines Vision + RAG output + original claim data into one payload for Agent 3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/analyze/decision",
+        "sendBody": true,
+        "specifyBody": "keypair",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "product_category",        "value": "={{ $json.product_category }}" },
+            { "name": "product_type",             "value": "={{ $json.product_type }}" },
+            { "name": "damage_type",              "value": "={{ $json.damage_type }}" },
+            { "name": "damage_location",          "value": "={{ $json.damage_location }}" },
+            { "name": "severity",                 "value": "={{ $json.severity }}" },
+            { "name": "confidence",               "value": "={{ $json.confidence }}" },
+            { "name": "visual_evidence",          "value": "={{ $json.visual_evidence }}" },
+            { "name": "description_consistency",  "value": "={{ $json.description_consistency }}" },
+            { "name": "uncertainty",              "value": "={{ $json.uncertainty }}" },
+            { "name": "rag_query",                "value": "={{ $json.rag_query }}" },
+            { "name": "applicable_policy",        "value": "={{ $json.applicable_policy }}" },
+            { "name": "policy_summary",           "value": "={{ $json.policy_summary }}" },
+            { "name": "policy_sources",           "value": "={{ $json.policy_sources }}" },
+            { "name": "policy_chunks",            "value": "={{ $json.policy_chunks }}" },
+            { "name": "retrieval_successful",     "value": "={{ $json.retrieval_successful }}" },
+            { "name": "order_id",                 "value": "={{ $json.order_id }}" },
+            { "name": "product_name",             "value": "={{ $json.product_name }}" },
+            { "name": "product_category_order",   "value": "={{ $json.product_category_order }}" },
+            { "name": "purchase_price",           "value": "={{ $json.purchase_price }}" },
+            { "name": "delivery_status",          "value": "={{ $json.delivery_status }}" }
+          ]
+        },
+        "options": { "timeout": 60000 }
+      },
+      "id": "node_decision",
+      "name": "Agent 3 — Decision Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1240, 300],
+      "notes": "Claim evaluation with Python guardrails + Gemini LLM. Returns: decision, confidence, risk_level, reason, guardrail_hit, evidence_chain"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "cond_approved",
+              "leftValue": "={{ $json.decision }}",
+              "rightValue": "APPROVED",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node_if",
+      "name": "IF — APPROVED or HUMAN_REVIEW",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1500, 300],
+      "notes": "True branch = APPROVED. False branch = HUMAN_REVIEW."
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'success', decision: { decision: $('Agent 3 — Decision Agent').item.json.decision, confidence: $('Agent 3 — Decision Agent').item.json.confidence, risk_level: $('Agent 3 — Decision Agent').item.json.risk_level, reason: $('Agent 3 — Decision Agent').item.json.reason, guardrail_hit: $('Agent 3 — Decision Agent').item.json.guardrail_hit, evidence_chain: $('Agent 3 — Decision Agent').item.json.evidence_chain, reasoning_steps: $('Agent 3 — Decision Agent').item.json.reasoning_steps }, vision: { product_category: $('Agent 1 — Vision Agent').item.json.product_category, product_type: $('Agent 1 — Vision Agent').item.json.product_type, damage_type: $('Agent 1 — Vision Agent').item.json.damage_type, damage_location: $('Agent 1 — Vision Agent').item.json.damage_location, severity: $('Agent 1 — Vision Agent').item.json.severity, confidence: $('Agent 1 — Vision Agent').item.json.confidence, visual_evidence: $('Agent 1 — Vision Agent').item.json.visual_evidence, description_consistency: $('Agent 1 — Vision Agent').item.json.description_consistency, uncertainty: $('Agent 1 — Vision Agent').item.json.uncertainty }, rag: { query: $('Agent 2 — RAG Agent').item.json.query, applicable_policy: $('Agent 2 — RAG Agent').item.json.applicable_policy, summary: $('Agent 2 — RAG Agent').item.json.summary, sources: $('Agent 2 — RAG Agent').item.json.sources, chunks: $('Agent 2 — RAG Agent').item.json.chunks, retrieval_successful: $('Agent 2 — RAG Agent').item.json.retrieval_successful } }) }}",
+        "options": { "responseCode": 200 }
+      },
+      "id": "node_respond_approved",
+      "name": "Respond — APPROVED",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1760, 160]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'escalated', decision: { decision: $('Agent 3 — Decision Agent').item.json.decision, confidence: $('Agent 3 — Decision Agent').item.json.confidence, risk_level: $('Agent 3 — Decision Agent').item.json.risk_level, reason: $('Agent 3 — Decision Agent').item.json.reason, guardrail_hit: $('Agent 3 — Decision Agent').item.json.guardrail_hit, evidence_chain: $('Agent 3 — Decision Agent').item.json.evidence_chain, reasoning_steps: $('Agent 3 — Decision Agent').item.json.reasoning_steps }, vision: { product_category: $('Agent 1 — Vision Agent').item.json.product_category, product_type: $('Agent 1 — Vision Agent').item.json.product_type, damage_type: $('Agent 1 — Vision Agent').item.json.damage_type, damage_location: $('Agent 1 — Vision Agent').item.json.damage_location, severity: $('Agent 1 — Vision Agent').item.json.severity, confidence: $('Agent 1 — Vision Agent').item.json.confidence, visual_evidence: $('Agent 1 — Vision Agent').item.json.visual_evidence, description_consistency: $('Agent 1 — Vision Agent').item.json.description_consistency, uncertainty: $('Agent 1 — Vision Agent').item.json.uncertainty }, rag: { query: $('Agent 2 — RAG Agent').item.json.query, applicable_policy: $('Agent 2 — RAG Agent').item.json.applicable_policy, summary: $('Agent 2 — RAG Agent').item.json.summary, sources: $('Agent 2 — RAG Agent').item.json.sources, chunks: $('Agent 2 — RAG Agent').item.json.chunks, retrieval_successful: $('Agent 2 — RAG Agent').item.json.retrieval_successful } }) }}",
+        "options": { "responseCode": 200 }
+      },
+      "id": "node_respond_review",
+      "name": "Respond — HUMAN_REVIEW",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1760, 440]
+    }
+  ],
+  "connections": {
+    "Webhook — Receive Claim": {
+      "main": [[{ "node": "Agent 1 — Vision Agent", "type": "main", "index": 0 }]]
+    },
+    "Agent 1 — Vision Agent": {
+      "main": [[{ "node": "Agent 2 — RAG Agent", "type": "main", "index": 0 }]]
+    },
+    "Agent 2 — RAG Agent": {
+      "main": [[{ "node": "Merge — Vision + RAG + Claim", "type": "main", "index": 0 }]]
+    },
+    "Merge — Vision + RAG + Claim": {
+      "main": [[{ "node": "Agent 3 — Decision Agent", "type": "main", "index": 0 }]]
+    },
+    "Agent 3 — Decision Agent": {
+      "main": [[{ "node": "IF — APPROVED or HUMAN_REVIEW", "type": "main", "index": 0 }]]
+    },
+    "IF — APPROVED or HUMAN_REVIEW": {
+      "main": [
+        [{ "node": "Respond — APPROVED", "type": "main", "index": 0 }],
+        [{ "node": "Respond — HUMAN_REVIEW", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-10-16T00:00:00.000Z",
+  "versionId": "2"
+}

@@ -38,9 +38,9 @@ MODEL_NAME = os.getenv(
 )
 
 CONFIDENCE_THRESHOLD = 0.80
-MAX_ATTEMPTS = 3
-MAX_MODEL_RETRIES = 2
-RETRY_DELAY_SECONDS = 3
+MAX_ATTEMPTS = 2
+MAX_MODEL_RETRIES = 1
+RETRY_DELAY_SECONDS = 2
 
 
 # ============================================================
@@ -167,14 +167,12 @@ class VisionAgent:
     # ========================================================
 
     def _get_models_to_try(self) -> list[str]:
-
         models = [
             self.active_model,
             "gemini-3.1-flash-lite",
             "gemini-3.5-flash",
-            "gemini-3.8-flash",
+            "gemini-3.6-flash",
         ]
-
         return list(dict.fromkeys(models))
 
     # ========================================================
