@@ -7,4 +7,11 @@ sentence-transformers
 pandas
 pillow
 requests
+pdfplumber
+reportlab
+pymupdf
 
+
+fastapi
+uvicorn
+requests
