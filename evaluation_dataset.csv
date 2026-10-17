@@ -1,0 +1,5 @@
+image_path,customer_description,expected_damage_class,expected_severity,expected_description_consistency
+evaluation_images\shoes.PNG,"Une tache est visible sur la chaussure gauche.",stain,High,consistent
+evaluation_images\bag.jpg,"Le sac à dos est sale.",tear,High,inconsistent
+evaluation_images\vase.PNG,"Le grand vase décoratif aux motifs de paon semble intact et en bon état général sur la partie visible.",none,None,consistent
+evaluation_images\fauteil.PNG,"Le fauteuil est fortement endommagé avec un revêtement arraché et l'absence du coussin d'assise qui laisse la mousse à nu.",missing_part,High,consistent

@@ -484,6 +484,68 @@ The application will open in the browser.
 
 ---
 
+# 📊 Vision Agent Evaluation
+
+Create a CSV with one image and customer description per row. To calculate
+accuracy metrics, have a human inspect each image and fill the three
+`expected_*` reference columns:
+
+```csv
+image_path,customer_description,expected_damage_class,expected_severity,expected_description_consistency
+images/case_01.jpg,"There is a stain on the left shoe.",stain,Low,consistent
+images/case_02.jpg,"The package arrived undamaged.",none,None,consistent
+```
+
+Damage classes: `none`, `stain`, `tear`, `crack`, `broken`, `missing_part`,
+`other`, `unknown`. Severities: `None`, `Low`, `Medium`, `High`, `Unknown`.
+Description consistency: `consistent`, `inconsistent`, `uncertain`. The
+example labels are illustrative; reference labels must be decided from each
+image by a human reviewer. Paths may be absolute or relative to the CSV file.
+Run the evaluator from the project root:
+
+```powershell
+python evaluate_vision.py evaluation_dataset.csv --repeats 3
+```
+
+The script saves `vision_evaluation_results.json` by default. It reports
+technical success and output completeness rates, repeatability across vision
+runs, latency, errors, and scores from a Gemini LLM judge. Each case is
+analyzed three times by default and judged once. Set `GEMINI_JUDGE_MODEL` in
+`.env` to change the judge model (default: `gemini-3.8-flash`).
+
+When the reference columns are filled, the report also calculates accuracy,
+macro-F1, per-class precision/recall/F1 and confusion matrices for damage
+class, severity and description consistency, plus severity MAE and weighted
+kappa. Damage classes are mapped from the agent's free-text output using
+keyword rules; inspect those mappings when interpreting results. These
+metrics measure performance on labeled cases, not a guarantee for all
+real-world returns.
+
+---
+
+# 📊 Policy RAG Agent Evaluation
+
+Run the end-to-end Agent 2 evaluation from the project root:
+
+```powershell
+python evaluate_rag_agent.py
+```
+
+The script uses four fixed VisionAnalysis test cases, reads the policy
+documents in `data/knowledge_base/` as reference material, and asks a Gemini
+judge to score policy selection, factual accuracy, source grounding,
+completeness, and uncertainty handling from 0 to 2 each. It also reports
+expected-source recall and applicable-policy accuracy. The JSON report is
+written to `rag_evaluation_results.json`. Override the judge model with
+`--judge-model` or `GEMINI_JUDGE_MODEL`.
+
+The evaluation makes live Gemini calls for query rewriting, synthesis, and
+judging. A quota/API error is recorded in the report; it is not an agent
+quality score. LLM judge scores are estimates and should be checked manually
+against the policy text.
+
+---
+
 # 🧪 Test the Vision Agent
 
 Before launching the complete application, the Vision Agent can be tested independently.

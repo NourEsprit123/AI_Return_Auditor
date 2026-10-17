@@ -1,0 +1,234 @@
+{
+  "judge_model": "gemini-3.8-flash",
+  "score_scale": "0-2 per criterion; total 0-10",
+  "criteria": [
+    "policy_selection",
+    "factual_accuracy",
+    "source_grounding",
+    "completeness",
+    "uncertainty_handling"
+  ],
+  "summary": {
+    "cases": 4,
+    "agent_success_rate": 1.0,
+    "retrieval_success_rate": 1.0,
+    "expected_source_recall_mean": 0.875,
+    "applicable_policy_accuracy": 1.0,
+    "judge_successful_cases": 1,
+    "judge_average_scores": {
+      "policy_selection": 2,
+      "factual_accuracy": 2,
+      "source_grounding": 2,
+      "completeness": 1,
+      "uncertainty_handling": 2,
+      "score_out_of_10": 9
+    },
+    "note": "LLM judge scores are automated estimates. Manually verify the rationale and source text, especially for policy-critical claims."
+  },
+  "results": [
+    {
+      "id": "eyeglasses-delivery-damage",
+      "description": "Eyeglasses with a detached temple arm at delivery",
+      "expected_policy": "Return Policy",
+      "expected_sources": [
+        "return_policy.txt"
+      ],
+      "status": "success",
+      "retrieval_successful": true,
+      "applicable_policy": "Return Policy",
+      "sources": [
+        "return_policy.txt",
+        "warranty_policy.txt"
+      ],
+      "query": "Return, refund, and warranty policy for eyeglasses with broken or detached temple arm component, high severity physical damage, and claim description mismatch or product inconsistency.",
+      "summary": "According to the Return Policy, accessories such as eyeglasses are eligible for return if a temple arm is broken or detached upon delivery, or if the product is significantly different from what was ordered. The visual evidence shows high-severity damage with a temple arm detached at the hinge, which meets the physical damage condition for eyeglasses. However, there is a clear description inconsistency because the customer described shoes whereas the image shows eyeglasses. Furthermore, the retrieved policy chunks do not explicitly address how to resolve claims featuring a complete mismatch between customer descriptions and submitted images. Therefore, while the physical defect matches return criteria for eyeglasses, the description mismatch remains an unresolved issue under the provided policy terms.",
+      "policy_summary": {
+        "applicable_policy": "Return Policy",
+        "policy_conditions": "Accessories such as eyeglasses are eligible for return if a lens, frame, or temple arm is broken, cracked, or detached upon delivery, or if the item delivered is significantly different from the description.",
+        "claim_assessment": "The physical damage of a detached temple arm aligns with the return conditions for eyeglasses, but the claim presents a major inconsistency as the customer described shoes while the image shows eyeglasses.",
+        "exceptions": "Return policy acceptance requires that the damage was present upon delivery or that the wrong item was delivered to the customer.",
+        "uncertainty": "The retrieved policy chunks do not specify how to handle claims with a complete mismatch between the customer's written description and the submitted image, nor do they verify if damage occurred prior to delivery.",
+        "synthesis": "According to the Return Policy, accessories such as eyeglasses are eligible for return if a temple arm is broken or detached upon delivery, or if the product is significantly different from what was ordered. The visual evidence shows high-severity damage with a temple arm detached at the hinge, which meets the physical damage condition for eyeglasses. However, there is a clear description inconsistency because the customer described shoes whereas the image shows eyeglasses. Furthermore, the retrieved policy chunks do not explicitly address how to resolve claims featuring a complete mismatch between customer descriptions and submitted images. Therefore, while the physical defect matches return criteria for eyeglasses, the description mismatch remains an unresolved issue under the provided policy terms."
+      },
+      "retrieved_chunks": [
+        {
+          "source": "return_policy.txt",
+          "doc_type": "Return Policy",
+          "text": "Accessories: returns accepted for broken components, missing parts, or damage present at delivery. Accessories such as eyeglasses are eligible for return if a lens, frame, or temple arm is broken, cracked, or detached upon delivery.\n\nHome and kitchen: returns accepted for broken, cracked, or missing components present at delivery.",
+          "relevance_score": 5.0856
+        },
+        {
+          "source": "warranty_policy.txt",
+          "doc_type": "Warranty Policy",
+          "text": "Examples include eyeglass temple arms that detach at the hinge without impact, shoe soles that separate from the upper without outdoor use, electronic connectors that fail without physical stress.",
+          "relevance_score": -0.2688
+        },
+        {
+          "source": "return_policy.txt",
+          "doc_type": "Return Policy",
+          "text": "Returns are accepted for products that arrive damaged, defective, or significantly different from the product description on the platform. A product is considered damaged if it presents visible physical defects such as cracks, breaks, tears, stains, deformation, or any structural damage that was not present in the product listing.\n\nProducts that show no visible damage and function as described are not eligible for return unless the wrong item was delivered.\n\n---.",
+          "relevance_score": -3.2053
+        }
+      ],
+      "judge_score": null,
+      "errors": [
+        "ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash\\nPlease retry in 12h38m51.948427757s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.8-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '45531s'}]}}"
+      ]
+    },
+    {
+      "id": "latent-eyeglasses-defect",
+      "description": "Eyeglass hinge failure after two weeks of normal use",
+      "expected_policy": "Warranty Policy",
+      "expected_sources": [
+        "warranty_policy.txt"
+      ],
+      "status": "success",
+      "retrieval_successful": true,
+      "applicable_policy": "Warranty Policy",
+      "sources": [
+        "return_policy.txt",
+        "warranty_policy.txt"
+      ],
+      "query": "Return and refund policy for Eyeglasses with Temple arm detached at hinge after two weeks of normal use; possible latent manufacturing defect, High severity",
+      "summary": "Based on the retrieved chunks from warranty_policy.txt, the most applicable policy is the Warranty Policy. The policy explicitly defines structural failure and latent defects to include eyeglass hinges that break or temple arms that detach at the hinge after two weeks of normal use without impact. Because the customer reports this exact failure mode after two weeks of regular wear, the claim aligns with the illustrative conditions of latent defect coverage rather than the delivery-only terms of the Return Policy. However, the retrieved excerpts do not clarify the overall warranty time window or specific evidentiary criteria needed to prove manufacturing failure over external force.",
+      "policy_summary": {
+        "applicable_policy": "Warranty Policy",
+        "policy_conditions": "Covers latent defects and structural failures where components detach or fracture under normal operating conditions due to assembly quality or material fatigue, specifically citing eyeglass temple arms detaching at the hinge without impact after two weeks of normal use.",
+        "claim_assessment": "The described damage of a temple arm detaching at the hinge after two weeks of normal use appears to satisfy the explicit criteria and examples provided for latent defect coverage under the Warranty Policy.",
+        "exceptions": "Standard Return Policy coverage is limited to damage or detachment present upon delivery, whereas warranty coverage applies to structural failure occurring during subsequent normal use without physical impact.",
+        "uncertainty": "The retrieved chunks do not specify the total warranty duration, formal claim filing procedures, or required documentation to substantiate normal use over accidental impact.",
+        "synthesis": "Based on the retrieved chunks from warranty_policy.txt, the most applicable policy is the Warranty Policy. The policy explicitly defines structural failure and latent defects to include eyeglass hinges that break or temple arms that detach at the hinge after two weeks of normal use without impact. Because the customer reports this exact failure mode after two weeks of regular wear, the claim aligns with the illustrative conditions of latent defect coverage rather than the delivery-only terms of the Return Policy. However, the retrieved excerpts do not clarify the overall warranty time window or specific evidentiary criteria needed to prove manufacturing failure over external force."
+      },
+      "retrieved_chunks": [
+        {
+          "source": "warranty_policy.txt",
+          "doc_type": "Warranty Policy",
+          "text": "Examples of latent defects:\n- A hinge on eyeglasses that breaks after 2 weeks of normal use due to inadequate metal fatigue resistance.\n- A shoe sole that begins to separate after 3 uses due to inadequate adhesive bonding.\n- An electronic component that fails after 1 month under normal operating conditions due to a faulty capacitor.\n\n---\n\nSECTION 9 — WARRANTY AND REFUND INTERACTION.",
+          "relevance_score": 3.489
+        },
+        {
+          "source": "return_policy.txt",
+          "doc_type": "Return Policy",
+          "text": "Accessories such as eyeglasses are eligible for return if a lens, frame, or temple arm is broken, cracked, or detached upon delivery.\n\nHome and kitchen: returns accepted for broken, cracked, or missing components present at delivery.",
+          "relevance_score": 2.094
+        },
+        {
+          "source": "warranty_policy.txt",
+          "doc_type": "Warranty Policy",
+          "text": "- Structural failure: components that break, detach, or fracture under normal use conditions due to inadequate material strength or assembly quality. Examples include eyeglass temple arms that detach at the hinge without impact, shoe soles that separate from the upper without outdoor use, electronic connectors that fail without physical stress.",
+          "relevance_score": 0.968
+        }
+      ],
+      "judge_score": {
+        "policy_selection": 2,
+        "factual_accuracy": 2,
+        "source_grounding": 2,
+        "completeness": 1,
+        "uncertainty_handling": 2,
+        "rationale": "The agent correctly selected the Warranty Policy as primary and accurately cited the explicit latent defect example of an eyeglass hinge failure after two weeks of normal use. However, because relevant sections were not retrieved, it missed specific policy terms regarding warranty duration (e.g., the 90-day manufacturer warranty for accessories) and the procedural requirement to submit specifically as a warranty claim with evidence of how it was discovered. Uncertainty was handled exceptionally well, explicitly noting that the duration, claim criteria, and proof of manufacturing defect versus external impact remain unverified.",
+        "score_out_of_10": 9
+      },
+      "errors": []
+    },
+    {
+      "id": "shoes-cosmetic-stain",
+      "description": "Shoes arrived with visible cosmetic stains",
+      "expected_policy": "Return Policy",
+      "expected_sources": [
+        "return_policy.txt",
+        "refund_policy.txt"
+      ],
+      "status": "success",
+      "retrieval_successful": true,
+      "applicable_policy": "Return Policy",
+      "sources": [
+        "return_policy.txt",
+        "refund_policy.txt"
+      ],
+      "query": "Return and refund policy for Running shoes with Visible mud and dirt stains, Medium severity",
+      "summary": "According to the Return Policy (return_policy.txt), footwear returns are accepted for visible stains present at delivery, material defects, sole separation, or structural damage. The policy explicitly stipulates that footwear showing signs of outdoor use is not eligible for return on cosmetic grounds unless the condition was present before first use. The damage analysis identifies medium-severity mud and dirt stains on the upper fabric and midsoles, which constitutes cosmetic staining. However, the policy does not resolve whether the stains occurred prior to delivery or during outdoor wear by the customer. Therefore, whether the claim meets the conditions depends on verifying the timing of the stain occurrence.",
+      "policy_summary": {
+        "applicable_policy": "Return Policy",
+        "policy_conditions": "Under the Return Policy for footwear, returns are accepted for sole separation, material defects, visible stains present at delivery, or structural damage.",
+        "claim_assessment": "The claim involves visible mud and dirt stains, which may satisfy policy conditions only if the stains were present at delivery and not the result of outdoor use.",
+        "exceptions": "Footwear showing signs of outdoor use is not eligible for return on cosmetic grounds unless the damage was demonstrably present before first use.",
+        "uncertainty": "The retrieved policy chunks do not provide guidance on resolving whether the mud and dirt stains were present upon delivery or accumulated from outdoor use after receipt.",
+        "synthesis": "According to the Return Policy (return_policy.txt), footwear returns are accepted for visible stains present at delivery, material defects, sole separation, or structural damage. The policy explicitly stipulates that footwear showing signs of outdoor use is not eligible for return on cosmetic grounds unless the condition was present before first use. The damage analysis identifies medium-severity mud and dirt stains on the upper fabric and midsoles, which constitutes cosmetic staining. However, the policy does not resolve whether the stains occurred prior to delivery or during outdoor wear by the customer. Therefore, whether the claim meets the conditions depends on verifying the timing of the stain occurrence."
+      },
+      "retrieved_chunks": [
+        {
+          "source": "return_policy.txt",
+          "doc_type": "Return Policy",
+          "text": "Footwear: returns accepted for sole separation, material defects, visible stains present at delivery, or structural damage. Footwear showing signs of outdoor use is not eligible for return on cosmetic grounds unless the damage was present before first use.\n\nClothing and apparel: returns accepted for fabric defects, incorrect sizing where the delivered size differs from the ordered size, or damage present at delivery.",
+          "relevance_score": -1.6659
+        },
+        {
+          "source": "refund_policy.txt",
+          "doc_type": "Refund Policy",
+          "text": "REFUND POLICY\nE-Commerce Return Auditor Platform\nVersion 2.1 — Effective January 2026\n\n---\n\nSECTION 1 — REFUND ELIGIBILITY\n\nA refund may be issued when a return request has been approved and the returned product has been received and inspected at the warehouse, or when the nature of the claim makes a return unnecessary (see Section 4).",
+          "relevance_score": -6.4119
+        },
+        {
+          "source": "refund_policy.txt",
+          "doc_type": "Refund Policy",
+          "text": "The decision to issue a refund without return is at the discretion of the platform and requires human reviewer approval.\n\n---\n\nSECTION 5 — REFUND TIMELINE.",
+          "relevance_score": -7.0975
+        }
+      ],
+      "judge_score": null,
+      "errors": [
+        "ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash\\nPlease retry in 12h38m1.201806238s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.8-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '45481s'}]}}"
+      ]
+    },
+    {
+      "id": "broken-product-full-refund",
+      "description": "Product arrived broken and completely unusable",
+      "expected_policy": "Refund Policy",
+      "expected_sources": [
+        "refund_policy.txt",
+        "return_policy.txt"
+      ],
+      "status": "success",
+      "retrieval_successful": true,
+      "applicable_policy": "Refund Policy",
+      "sources": [
+        "warranty_policy.txt",
+        "refund_policy.txt"
+      ],
+      "query": "Return and refund policy for Ceramic vase with Broken into several pieces, High severity",
+      "summary": "The applicable framework retrieved is the Refund Policy. Section 3 outlines partial refund conditions for cosmetic damage or items that retain primary functionality, which the severely shattered ceramic vase does not satisfy. Chunk 1 notes full refunds may be issued under the refund policy, and Section 7 covers proportional refunds for bundle orders. However, the retrieved excerpts do not state the baseline requirements, filing deadlines, or standard procedures for a full refund on a single broken item. Therefore, while the damage falls outside partial refund eligibility, full policy compliance cannot be conclusively verified from these chunks alone.",
+      "policy_summary": {
+        "applicable_policy": "Refund Policy",
+        "policy_conditions": "Under Section 3, partial refunds apply to cosmetic defects, non-essential component damage, or when the product remains usable for its primary purpose. Under Section 7, refunds for multi-item orders apply only to the damaged item, or proportionally for bundles unless the entire set is rendered unusable. Chunk 1 references full refunds issued in accordance with the refund policy.",
+        "claim_assessment": "The claim describes a ceramic vase broken into several pieces with high severity, indicating it cannot be used for its primary purpose and thus does not appear to satisfy the conditions for a partial refund under Section 3.",
+        "exceptions": "Under Section 7, if the item was purchased as part of a bundle or set, the refund is proportional unless the damage renders the entire bundle unusable.",
+        "uncertainty": "The retrieved chunks do not include the standard return window, evidence requirements for transit damage, or the complete conditions governing full refunds for single severely damaged items.",
+        "synthesis": "The applicable framework retrieved is the Refund Policy. Section 3 outlines partial refund conditions for cosmetic damage or items that retain primary functionality, which the severely shattered ceramic vase does not satisfy. Chunk 1 notes full refunds may be issued under the refund policy, and Section 7 covers proportional refunds for bundle orders. However, the retrieved excerpts do not state the baseline requirements, filing deadlines, or standard procedures for a full refund on a single broken item. Therefore, while the damage falls outside partial refund eligibility, full policy compliance cannot be conclusively verified from these chunks alone."
+      },
+      "retrieved_chunks": [
+        {
+          "source": "warranty_policy.txt",
+          "doc_type": "Warranty Policy",
+          "text": "Full refund: a refund of the full purchase price is issued in accordance with the refund policy.\n3.",
+          "relevance_score": -4.708
+        },
+        {
+          "source": "refund_policy.txt",
+          "doc_type": "Refund Policy",
+          "text": "---\n\nSECTION 7 — REFUND FOR ORDERS WITH MULTIPLE ITEMS\n\nFor orders containing multiple items, the refund applies only to the specific item or items that are returned and approved. The remaining items in the order are not affected.\n\nIf a bundle or set is purchased and only part of the set is damaged, the refund is calculated as a proportion of the total bundle price corresponding to the damaged item, unless the damage renders the entire bundle unusable.\n\n---\n\nSECTION 8 — REFUND DISPUTES.",
+          "relevance_score": -6.5953
+        },
+        {
+          "source": "refund_policy.txt",
+          "doc_type": "Refund Policy",
+          "text": "SECTION 3 — PARTIAL REFUND CONDITIONS\n\nA partial refund of the purchase price may be issued when:\n\n- The product arrived with cosmetic damage that does not affect its primary function, such as a surface stain, minor scratch, or small dent.\n- The damage is limited to a non-essential component or accessory included with the product.\n- The product can still be used for its primary purpose despite the reported defect.\n- The customer requests to keep the damaged product rather than returning it.",
+          "relevance_score": -6.8655
+        }
+      ],
+      "judge_score": null,
+      "errors": [
+        "ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash\\nPlease retry in 12h37m35.541080755s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.8-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '45455s'}]}}"
+      ]
+    }
+  ]
+}

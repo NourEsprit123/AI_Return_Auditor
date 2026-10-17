@@ -1,0 +1,582 @@
+{
+  "cases_evaluated": 4,
+  "repeats_per_case": 3,
+  "judge_model": "gemini-3.8-flash",
+  "score_scale": "1 (very poor) to 5 (excellent)",
+  "reference_evaluation": {
+    "dataset_case_count": 4,
+    "human_labeled_case_count": 4,
+    "unlabeled_case_count": 0,
+    "annotated_case_count": 4,
+    "metrics": {
+      "damage_class": {
+        "sample_count": 4,
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "labels": [
+          "missing_part",
+          "none",
+          "stain",
+          "tear"
+        ],
+        "per_class": {
+          "missing_part": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 1
+          },
+          "none": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 1
+          },
+          "stain": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 1
+          },
+          "tear": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 1
+          }
+        },
+        "confusion_matrix": {
+          "missing_part": {
+            "missing_part": 1,
+            "none": 0,
+            "stain": 0,
+            "tear": 0
+          },
+          "none": {
+            "missing_part": 0,
+            "none": 1,
+            "stain": 0,
+            "tear": 0
+          },
+          "stain": {
+            "missing_part": 0,
+            "none": 0,
+            "stain": 1,
+            "tear": 0
+          },
+          "tear": {
+            "missing_part": 0,
+            "none": 0,
+            "stain": 0,
+            "tear": 1
+          }
+        }
+      },
+      "severity": {
+        "classification": {
+          "sample_count": 4,
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "labels": [
+            "High",
+            "None"
+          ],
+          "per_class": {
+            "High": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            },
+            "None": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 1
+            }
+          },
+          "confusion_matrix": {
+            "High": {
+              "High": 3,
+              "None": 0
+            },
+            "None": {
+              "High": 0,
+              "None": 1
+            }
+          }
+        },
+        "ordinal": {
+          "sample_count": 4,
+          "mae": 0,
+          "weighted_kappa": 1.0,
+          "excluded_unknown_count": 0
+        }
+      },
+      "description_consistency": {
+        "sample_count": 4,
+        "accuracy": 0.75,
+        "macro_f1": 0.6,
+        "labels": [
+          "consistent",
+          "inconsistent",
+          "uncertain"
+        ],
+        "per_class": {
+          "consistent": {
+            "precision": 1.0,
+            "recall": 0.667,
+            "f1": 0.8,
+            "support": 3
+          },
+          "inconsistent": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 1
+          },
+          "uncertain": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 0
+          }
+        },
+        "confusion_matrix": {
+          "consistent": {
+            "consistent": 2,
+            "inconsistent": 0,
+            "uncertain": 1
+          },
+          "inconsistent": {
+            "consistent": 0,
+            "inconsistent": 1,
+            "uncertain": 0
+          },
+          "uncertain": {
+            "consistent": 0,
+            "inconsistent": 0,
+            "uncertain": 0
+          }
+        }
+      }
+    },
+    "note": "Metrics compare the first successful vision run per image to the human-provided reference labels. Damage classes are mapped from the agent's free-text damage_type using keyword rules."
+  },
+  "metrics": {
+    "vision_run_success_rate": 1.0,
+    "complete_output_rate": 1.0,
+    "stability_pairwise_agreement_mean": 0.555,
+    "stability_exact_output_agreement_mean": 0.0,
+    "vision_latency_seconds": {
+      "mean": 5.172,
+      "median": 4.373,
+      "p95": 13.909
+    },
+    "judge_latency_seconds": {
+      "mean": 11.846,
+      "median": 10.631,
+      "p95": 15.816
+    },
+    "judge_average_scores_1_to_5": {
+      "visual_grounding": 4.0,
+      "damage_identification": 4.0,
+      "severity_assessment": 4.0,
+      "description_consistency": 3.0,
+      "uncertainty_handling": 3.0,
+      "overall_score": 4.0
+    },
+    "error_count": 3,
+    "errors": [
+      {
+        "image_path": "D:\\AI_Return_Auditor\\evaluation_images\\bag.jpg",
+        "stage": "judge",
+        "error": "ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash\\nPlease retry in 9h52m26.520501251s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.8-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '35546s'}]}}"
+      },
+      {
+        "image_path": "D:\\AI_Return_Auditor\\evaluation_images\\vase.PNG",
+        "stage": "judge",
+        "error": "ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash\\nPlease retry in 9h52m3.658494463s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.8-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '35523s'}]}}"
+      },
+      {
+        "image_path": "D:\\AI_Return_Auditor\\evaluation_images\\fauteil.PNG",
+        "stage": "judge",
+        "error": "ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash\\nPlease retry in 9h51m30.0197678s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.8-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '35490s'}]}}"
+      }
+    ],
+    "note": "LLM-judge scores and repeatability are indicators, not ground-truth accuracy measurements. Reference metrics are reported separately when human labels are provided."
+  },
+  "results": [
+    {
+      "image_path": "D:\\AI_Return_Auditor\\evaluation_images\\shoes.PNG",
+      "customer_description": "Une tache est visible sur la chaussure gauche.",
+      "reference": {
+        "expected_damage_class": "stain",
+        "expected_severity": "High",
+        "expected_description_consistency": "consistent"
+      },
+      "runs": [
+        {
+          "run": 1,
+          "status": "success",
+          "latency_seconds": 4.927,
+          "complete": true,
+          "agent_output": {
+            "product_category": "Footwear",
+            "product_type": "Running sneakers",
+            "damage_type": "Stains and mud",
+            "damage_location": "Front, side, and soles of both shoes",
+            "severity": "High",
+            "confidence": 0.95,
+            "visual_evidence": "The shoes are heavily soiled with dried mud and debris across the mesh uppers, laces, and along the rubber soles.",
+            "description_consistency": "Consistent, although the damage is much more extensive than just a single 'tache' (stain) and affects both shoes.",
+            "uncertainty": "It is unclear if the damage is limited to mud or if there are additional permanent stains underneath, but the presence of significant dirt is clear."
+          }
+        },
+        {
+          "run": 2,
+          "status": "success",
+          "latency_seconds": 3.621,
+          "complete": true,
+          "agent_output": {
+            "product_category": "Footwear",
+            "product_type": "Running shoes",
+            "damage_type": "Stains and mud",
+            "damage_location": "Upper fabric, midsole, and laces of both shoes",
+            "severity": "High",
+            "confidence": 0.95,
+            "visual_evidence": "Both shoes exhibit significant brown, muddy stains on the pink knit uppers, the white midsoles, and the laces.",
+            "description_consistency": "Consistent, although the damage is more extensive and affects both shoes rather than just one.",
+            "uncertainty": "The customer only mentions a single stain on the left shoe, whereas both shoes are covered in heavy mud stains."
+          }
+        },
+        {
+          "run": 3,
+          "status": "success",
+          "latency_seconds": 3.626,
+          "complete": true,
+          "agent_output": {
+            "product_category": "Footwear",
+            "product_type": "Running sneakers",
+            "damage_type": "Mud stains and dirt residue",
+            "damage_location": "Uppers and soles of both shoes",
+            "severity": "High",
+            "confidence": 0.95,
+            "visual_evidence": "Extensive brown mud stains and dirt debris are visible across the fabric uppers and the white rubber midsoles of both the left and right sneakers.",
+            "description_consistency": "Consistent. The customer identified a stain on the left shoe; however, visual evidence shows significant staining on both shoes.",
+            "uncertainty": "The customer only mentioned a single stain on the left shoe, whereas the actual damage is much more widespread across both sneakers."
+          }
+        }
+      ],
+      "judge_score": {
+        "visual_grounding": 4,
+        "damage_identification": 4,
+        "severity_assessment": 4,
+        "description_consistency": 3,
+        "uncertainty_handling": 3,
+        "overall_score": 4,
+        "rationale": "The agent accurately identifies the severe mud soiling on both shoes based on visual evidence. It correctly notes that the customer's claim significantly understates the extent of the damage, and appropriately questions whether permanent stains lie underneath."
+      },
+      "errors": [],
+      "vision_latency_seconds": {
+        "mean": 4.058,
+        "median": 3.626
+      },
+      "stability": {
+        "pairwise_agreement": 0.444,
+        "exact_output_pairwise_agreement": 0.0,
+        "field_agreement": {
+          "product_category": 1.0,
+          "product_type": 0.333,
+          "damage_type": 0.333,
+          "damage_location": 0.0,
+          "severity": 1.0,
+          "description_consistency": 0.0
+        },
+        "confidence_standard_deviation": 0.0
+      },
+      "reference_comparison": {
+        "damage_class": "stain",
+        "severity": "High",
+        "description_consistency": "consistent"
+      },
+      "judge_latency_seconds": 15.816
+    },
+    {
+      "image_path": "D:\\AI_Return_Auditor\\evaluation_images\\bag.jpg",
+      "customer_description": "Le sac à dos est salé.",
+      "reference": {
+        "expected_damage_class": "tear",
+        "expected_severity": "High",
+        "expected_description_consistency": "inconsistent"
+      },
+      "runs": [
+        {
+          "run": 1,
+          "status": "success",
+          "latency_seconds": 5.367,
+          "complete": true,
+          "agent_output": {
+            "product_category": "Bags and Luggage",
+            "product_type": "Backpack",
+            "damage_type": "Material tear/hole",
+            "damage_location": "Main compartment or upper panel of the backpack",
+            "severity": "High",
+            "confidence": 0.95,
+            "visual_evidence": "There is a significant tear in the black synthetic fabric of the backpack, exposing the interior. The edges of the tear are frayed.",
+            "description_consistency": "Inconsistent. The customer described the bag as 'salé' (dirty/salty), but the image shows a major structural tear/hole rather than just dirt or salt residues.",
+            "uncertainty": "The customer's description does not mention the obvious physical tear visible in the image, suggesting they might be misreporting the primary issue or describing a different problem."
+          }
+        },
+        {
+          "run": 2,
+          "status": "success",
+          "latency_seconds": 4.392,
+          "complete": true,
+          "agent_output": {
+            "product_category": "Luggage & Bags",
+            "product_type": "Backpack",
+            "damage_type": "Tear/Rip in fabric",
+            "damage_location": "Main storage compartment zipper area",
+            "severity": "High",
+            "confidence": 0.95,
+            "visual_evidence": "The image shows a black backpack with a significant tear along the seam of the zippered compartment, with fraying fabric visible.",
+            "description_consistency": "Inconsistent. The customer described the item as 'salé' (dirty/salty), but the visible issue is a physical tear in the fabric.",
+            "uncertainty": "The customer's description does not mention the structural damage observed; it is possible the customer misidentified the issue or the photo shows a different concern than the one described."
+          }
+        },
+        {
+          "run": 3,
+          "status": "success",
+          "latency_seconds": 4.364,
+          "complete": true,
+          "agent_output": {
+            "product_category": "Luggage & Bags",
+            "product_type": "Backpack",
+            "damage_type": "Tear/Rip in fabric",
+            "damage_location": "Main storage compartment zipper area/fabric seam",
+            "severity": "High",
+            "confidence": 0.95,
+            "visual_evidence": "The image shows a large tear in the fabric along a seam near the top zipper of a black backpack.",
+            "description_consistency": "The customer stated the bag is 'salé' (dirty/salty), but the visual evidence shows a significant structural tear, which is not mentioned in the text.",
+            "uncertainty": "The customer's description of 'dirty' is not supported by the image, which instead reveals a major structural tear not mentioned by the customer."
+          }
+        }
+      ],
+      "judge_score": null,
+      "errors": [
+        {
+          "stage": "judge",
+          "error": "ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash\\nPlease retry in 9h52m26.520501251s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.8-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '35546s'}]}}"
+        }
+      ],
+      "vision_latency_seconds": {
+        "mean": 4.708,
+        "median": 4.392
+      },
+      "stability": {
+        "pairwise_agreement": 0.444,
+        "exact_output_pairwise_agreement": 0.0,
+        "field_agreement": {
+          "product_category": 0.333,
+          "product_type": 1.0,
+          "damage_type": 0.333,
+          "damage_location": 0.0,
+          "severity": 1.0,
+          "description_consistency": 0.0
+        },
+        "confidence_standard_deviation": 0.0
+      },
+      "reference_comparison": {
+        "damage_class": "tear",
+        "severity": "High",
+        "description_consistency": "inconsistent"
+      },
+      "judge_latency_seconds": 10.851
+    },
+    {
+      "image_path": "D:\\AI_Return_Auditor\\evaluation_images\\vase.PNG",
+      "customer_description": "Le grand vase décoratif aux motifs de paon semble intact et en bon état général sur la partie visible.",
+      "reference": {
+        "expected_damage_class": "none",
+        "expected_severity": "None",
+        "expected_description_consistency": "consistent"
+      },
+      "runs": [
+        {
+          "run": 1,
+          "status": "success",
+          "latency_seconds": 4.373,
+          "complete": true,
+          "agent_output": {
+            "product_category": "Home Decor",
+            "product_type": "Decorative Vase",
+            "damage_type": "None",
+            "damage_location": "N/A",
+            "severity": "None",
+            "confidence": 0.95,
+            "visual_evidence": "The image shows a large, ornamental vase with peacock and floral motifs. The surface appears smooth and intact without visible cracks, chips, or scratches in the provided angle.",
+            "description_consistency": "Consistent",
+            "uncertainty": "The base and the interior of the vase are not visible, so potential damage in those areas cannot be ruled out."
+          }
+        },
+        {
+          "run": 2,
+          "status": "success",
+          "latency_seconds": 3.857,
+          "complete": true,
+          "agent_output": {
+            "product_category": "Home Decor",
+            "product_type": "Ceramic decorative vase",
+            "damage_type": "None",
+            "damage_location": "None",
+            "severity": "None",
+            "confidence": 0.95,
+            "visual_evidence": "The vase shows no visible cracks, chips, or defects in the provided image.",
+            "description_consistency": "The visual evidence is consistent with the customer description stating the vase appears intact.",
+            "uncertainty": "The back of the vase and the base are not clearly visible, so potential damage in those specific areas cannot be ruled out."
+          }
+        },
+        {
+          "run": 3,
+          "status": "success",
+          "latency_seconds": 4.53,
+          "complete": true,
+          "agent_output": {
+            "product_category": "Home Decor",
+            "product_type": "Decorative Vase",
+            "damage_type": "None",
+            "damage_location": "N/A",
+            "severity": "None",
+            "confidence": 0.95,
+            "visual_evidence": "The image shows a ceramic vase with floral and peacock motifs. No visible cracks, chips, or surface defects are observed on the exterior of the vase held in the photo.",
+            "description_consistency": "Consistent. The customer states the vase appears intact and in good condition, which matches the visual observation.",
+            "uncertainty": "The base and interior of the vase are not visible, so potential damage in those areas cannot be ruled out."
+          }
+        }
+      ],
+      "judge_score": null,
+      "errors": [
+        {
+          "stage": "judge",
+          "error": "ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash\\nPlease retry in 9h52m3.658494463s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.8-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '35523s'}]}}"
+        }
+      ],
+      "vision_latency_seconds": {
+        "mean": 4.253,
+        "median": 4.373
+      },
+      "stability": {
+        "pairwise_agreement": 0.611,
+        "exact_output_pairwise_agreement": 0.0,
+        "field_agreement": {
+          "product_category": 1.0,
+          "product_type": 0.333,
+          "damage_type": 1.0,
+          "damage_location": 0.333,
+          "severity": 1.0,
+          "description_consistency": 0.0
+        },
+        "confidence_standard_deviation": 0.0
+      },
+      "reference_comparison": {
+        "damage_class": "none",
+        "severity": "None",
+        "description_consistency": "consistent"
+      },
+      "judge_latency_seconds": 10.084
+    },
+    {
+      "image_path": "D:\\AI_Return_Auditor\\evaluation_images\\fauteil.PNG",
+      "customer_description": "Le fauteuil est fortement endommagé avec un revêtement arraché et l'absence du coussin d'assise qui laisse la mousse à nu.",
+      "reference": {
+        "expected_damage_class": "missing_part",
+        "expected_severity": "High",
+        "expected_description_consistency": "consistent"
+      },
+      "runs": [
+        {
+          "run": 1,
+          "status": "success",
+          "latency_seconds": 13.909,
+          "complete": true,
+          "agent_output": {
+            "product_category": "Furniture",
+            "product_type": "Armchair",
+            "damage_type": "Torn upholstery and missing seat cushion",
+            "damage_location": "The seat area and the armrest sections",
+            "severity": "High",
+            "confidence": 0.95,
+            "visual_evidence": "The image shows an armchair with significant tearing of the synthetic leather covering on the armrests and front panel, revealing the underlying foam structure. The seat cushion is clearly missing, leaving the inner frame and padding exposed.",
+            "description_consistency": "The visual evidence fully supports the customer's description.",
+            "uncertainty": "None"
+          }
+        },
+        {
+          "run": 2,
+          "status": "success",
+          "latency_seconds": 5.157,
+          "complete": true,
+          "agent_output": {
+            "product_category": "Furniture",
+            "product_type": "Armchair",
+            "damage_type": "Torn upholstery and missing seat cushion",
+            "damage_location": "Throughout the armrests, backrest, and seating area",
+            "severity": "High",
+            "confidence": 1.0,
+            "visual_evidence": "The armchair shows extensive tearing of the synthetic leather covering on the armrests and front panel, revealing the underlying internal structure. The seat cushion is completely absent, leaving the foam base exposed.",
+            "description_consistency": "Consistent",
+            "uncertainty": "None"
+          }
+        },
+        {
+          "run": 3,
+          "status": "success",
+          "latency_seconds": 3.942,
+          "complete": true,
+          "agent_output": {
+            "product_category": "Furniture",
+            "product_type": "Armchair",
+            "damage_type": "Torn upholstery and missing seat cushion",
+            "damage_location": "Armrests, front panel, and seating area",
+            "severity": "High",
+            "confidence": 0.98,
+            "visual_evidence": "The image clearly shows the armchair's upholstery peeling and torn away from the armrests and front base. Additionally, the seat cushion is entirely missing, exposing the internal foam structure.",
+            "description_consistency": "Consistent",
+            "uncertainty": "None"
+          }
+        }
+      ],
+      "judge_score": null,
+      "errors": [
+        {
+          "stage": "judge",
+          "error": "ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash\\nPlease retry in 9h51m30.0197678s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.8-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '35490s'}]}}"
+        }
+      ],
+      "vision_latency_seconds": {
+        "mean": 7.669,
+        "median": 5.157
+      },
+      "stability": {
+        "pairwise_agreement": 0.722,
+        "exact_output_pairwise_agreement": 0.0,
+        "field_agreement": {
+          "product_category": 1.0,
+          "product_type": 1.0,
+          "damage_type": 1.0,
+          "damage_location": 0.0,
+          "severity": 1.0,
+          "description_consistency": 0.333
+        },
+        "confidence_standard_deviation": 0.0205
+      },
+      "reference_comparison": {
+        "damage_class": "missing_part",
+        "severity": "High",
+        "description_consistency": "uncertain"
+      },
+      "judge_latency_seconds": 10.631
+    }
+  ]
+}

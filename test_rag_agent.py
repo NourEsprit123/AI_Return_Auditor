@@ -18,22 +18,24 @@ from agents.rag_agent import RAGAgent
 # ============================================================
 
 mock_vision = VisionAnalysis(
-    product_category="Apparel and Accessories",
+    product_category="Accessories",
     product_type="Eyeglasses",
-    damage_type="Broken temple arm completely detached at the hinge",
+    damage_type=(
+        "The temple arm detached at the hinge after two weeks "
+        "of normal use; possible latent manufacturing defect"
+    ),
     damage_location="Left hinge / temple arm",
     severity="High",
-    confidence=0.97,
+    confidence=0.95,
     visual_evidence=(
-        "Black eyeglasses with left temple arm completely detached "
-        "at the hinge. Clean break at the metal joint indicating "
-        "structural failure."
+        "The left temple arm is detached at the hinge. "
+        "The customer reports that it happened after two weeks "
+        "of normal use, without an impact."
     ),
-    description_consistency=(
-        "Inconsistent — customer described shoes, image shows eyeglasses."
-    ),
+    description_consistency="Consistent with the customer's description.",
     uncertainty=(
-        "Customer description does not match the visible product."
+        "The image shows the detached arm, but cannot by itself prove "
+        "that this is a manufacturing defect or confirm the usage history."
     ),
 )
 
