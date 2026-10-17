@@ -237,20 +237,24 @@ the structured VisionAnalysis result.
         # STRUCTURED RESPONSE
         # ----------------------------------------------------
 
-        if getattr(response, "parsed", None):
+        parsed = getattr(response, "parsed", None)
 
-            return response.parsed
+        if parsed is not None:
+
+            return VisionAnalysis.model_validate(parsed)
 
         # ----------------------------------------------------
         # JSON FALLBACK
         # ----------------------------------------------------
 
-        if getattr(response, "text", None):
+        response_text = getattr(response, "text", None)
+
+        if response_text:
 
             try:
 
                 return VisionAnalysis.model_validate_json(
-                    response.text
+                    response_text
                 )
 
             except Exception as exc:

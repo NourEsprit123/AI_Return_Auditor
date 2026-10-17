@@ -1,743 +1,242 @@
-# 🤖 AI Return Auditor
+# AI Return Auditor
 
-> **Visual E-Commerce Return & Refund Auditor**
+AI Return Auditor is a local prototype for reviewing e-commerce return claims. A customer submits order details, a description, and a product photo in the Streamlit app. n8n coordinates the processing stages hosted by FastAPI:
 
-AI Return Auditor is an AI-powered system designed to automate and assist the verification of e-commerce return and refund claims.
+1. **Photo review** compares the image with the customer’s description using Gemini.
+2. **Policy matching** retrieves relevant passages from the local policy corpus.
+3. **Recommendation** samples a Groq model five times, applies consensus and business guardrails, then checks the result with a local Ollama model.
+4. **Response** returns the recommendation or an escalation status to the UI.
 
-The system combines **Multimodal AI, Computer Vision, Retrieval-Augmented Generation (RAG), decision guardrails, automation, and Human-in-the-Loop** to analyze customer claims and provide transparent, evidence-based decisions.
+This project provides a recommendation; it does not issue a refund, create a return label, or connect to an order-management system. Receipt OCR is not integrated yet.
 
----
+For implementation details, data flow, model behavior, limitations, and the complete n8n workflow, see [PROJECT_REPORT.md](./PROJECT_REPORT.md).
 
-## 🎯 Project Overview
+## Requirements
 
-When a customer requests a product return, the platform needs to determine whether the claim is consistent with the provided evidence and the company's return policy.
+- Windows 10/11, macOS, or Linux.
+- Python **3.11** recommended.
+- Git.
+- Gemini API key and Groq API key.
+- Ollama installed locally, with `qwen2.5:7b` downloaded.
+- n8n running locally. Docker Desktop is recommended for Windows.
+- Internet access for API calls and first-time download of Python/model dependencies.
 
-AI Return Auditor aims to automate this process through a multi-agent architecture.
+The retrieval embedding and reranking models are downloaded the first time the RAG stage runs. They may require several gigabytes of storage and can make the first request take longer.
 
-The system analyzes:
+## 1. Get the project and install Python dependencies
 
-* 📷 Product images
-* 📝 Customer descriptions
-* 📦 Order information
-* 📚 Return and refund policies
-* 🤖 AI-generated visual evidence
-* 🛡️ Decision rules and guardrails
+Open PowerShell (or a terminal) in the directory where you want the project:
 
-The final result can be:
+```powershell
+git clone <repository-url> AI_Return_Auditor
+cd AI_Return_Auditor
 
-* ✅ **APPROVED**
-* ⚠️ **HUMAN REVIEW**
-
-The system does not blindly trust the AI. Claims with uncertainty, inconsistencies, or insufficient evidence can be escalated to a human reviewer.
-
----
-
-# 🏗️ Architecture
-
-The project follows a **multi-agent architecture** composed of three specialized AI agents.
-
-```text
-                         ┌──────────────────────┐
-                         │       Customer       │
-                         │  Return Request      │
-                         └──────────┬───────────┘
-                                    │
-                       Image + Description
-                                    │
-                                    ▼
-                    ┌───────────────────────────┐
-                    │       Agent 1             │
-                    │  Multimodal Vision Agent  │
-                    └─────────────┬─────────────┘
-                                  │
-                       Visual Evidence
-                                  │
-                                  ▼
-                    ┌───────────────────────────┐
-                    │       Agent 2             │
-                    │       Policy RAG          │
-                    └─────────────┬─────────────┘
-                                  │
-                         Relevant Policies
-                                  │
-                                  ▼
-                    ┌───────────────────────────┐
-                    │       Agent 3             │
-                    │ Claim Evaluator +          │
-                    │ Decision Guardrails        │
-                    └─────────────┬─────────────┘
-                                  │
-                         ┌────────┴────────┐
-                         ▼                 ▼
-                    ✅ APPROVED       ⚠️ ESCALATED
-                                           │
-                                           ▼
-                                  ┌────────────────┐
-                                  │ Human Review   │
-                                  └────────────────┘
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
----
-
-# 🤖 AI Agents
-
-## Agent 1 — Multimodal Product Damage Analyzer
-
-The first agent analyzes the product image together with the customer's textual description.
-
-### Input
-
-* Product image
-* Customer description
-
-### Responsibilities
-
-The agent identifies:
-
-* Product category
-* Product type
-* Visible damage
-* Damage location
-* Damage severity
-* Visual evidence
-* Confidence score
-* Description/image consistency
-* Uncertainty
-
-### Example
-
-```text
-Image:
-Broken eyeglasses
-
-Customer description:
-"The shoes arrived with a stain."
-```
-
-The agent detects that the visual evidence does not correspond to the customer's description.
-
-### Technology
-
-* Gemini 3.1 Flash Lite
-* Google Gemini API
-* Multimodal AI
-* Computer Vision
-* Prompt Engineering
-* Pydantic Structured Output
-* Pillow
-
-The agent **does not approve or reject the claim**. Its role is to provide structured visual evidence to the following agents.
-
----
-
-## Agent 2 — Policy RAG Agent
-
-The second agent retrieves the most relevant return, refund, and warranty policies from the project's knowledge base.
-
-### Responsibilities
-
-* Retrieve relevant policy documents
-* Search the knowledge base
-* Rank relevant chunks
-* Provide policy evidence
-* Ground the final decision in company rules
-
-### RAG pipeline
-
-```text
-Policy Documents
-       │
-       ▼
-Document Processing
-       │
-       ▼
-Chunking
-       │
-       ▼
-Embeddings
-       │
-       ▼
-Vector Store
-       │
-       ▼
-Similarity Search
-       │
-       ▼
-Top-K Relevant Chunks
-       │
-       ▼
-Policy Evidence
-```
-
-The RAG component is designed to reduce unsupported AI decisions by grounding the evaluation in the project's policy knowledge base.
-
----
-
-## Agent 3 — Claim Evaluator & Decision Guardrails
-
-The third agent combines:
-
-* Order information
-* Customer description
-* Vision Agent results
-* Retrieved policies
-* Decision rules
-
-It produces a final recommendation.
-
-Possible outcomes:
-
-```text
-APPROVED
-    or
-HUMAN REVIEW
-```
-
-### Guardrails
-
-The system can escalate a claim when:
-
-* Visual evidence is inconsistent with the description
-* AI confidence is too low
-* Required information is missing
-* Evidence is ambiguous
-* Policy conditions are not clearly satisfied
-* The claim presents a high-risk situation
-
-This ensures that uncertain cases are not automatically approved.
-
----
-
-# 🧑‍💼 Human-in-the-Loop
-
-Human review is an important safety mechanism.
-
-When the AI cannot make a sufficiently reliable decision, the claim is sent to a human reviewer.
-
-The reviewer can:
-
-* Approve the claim
-* Reject the claim
-* Request additional information
-* Add comments
-* Review AI evidence
-* Review retrieved policies
-* Inspect the decision reasoning
-
-This creates a more trustworthy AI-assisted workflow.
-
----
-
-# 🔄 Application Workflow
-
-The Streamlit application contains five main interfaces.
-
-```text
-Home
-  │
-  ▼
-Return Request
-  │
-  ├── Order information
-  ├── Product information
-  ├── Customer description
-  └── Product image
-          │
-          ▼
-     AI Analysis
-          │
-          ├── Vision Agent
-          └── Policy RAG
-                  │
-                  ▼
-              Decision
-                  │
-          ┌───────┴────────┐
-          ▼                ▼
-      APPROVED        HUMAN REVIEW
-                           │
-                           ▼
-                    Reviewer decision
-```
-
-## Application Interfaces
-
-### 1. Home
-
-Presents the project and explains the AI verification workflow.
-
-### 2. Return Request
-
-Allows the customer or tester to provide:
-
-* Order ID
-* Product
-* Category
-* Purchase price
-* Delivery status
-* Product image
-* Customer description
-
-### 3. AI Analysis
-
-Displays the analysis performed by the AI agents.
-
-For the Vision Agent, the interface displays:
-
-* Product type
-* Damage type
-* Damage location
-* Severity
-* Confidence
-* Visual evidence
-* Description consistency
-* Uncertainty
-
-### 4. Decision
-
-Displays the final AI recommendation based on the available evidence and policy.
-
-### 5. Human Review
-
-Provides a reviewer interface for claims requiring manual verification.
-
----
-
-# 🧰 Technologies
-
-## Programming Language
-
-* **Python 3.11+**
-
-## Frontend / Interface
-
-* **Streamlit**
-
-## Artificial Intelligence
-
-* **Google Gemini API**
-* **Gemini 3.1 Flash Lite**
-* **Multimodal AI**
-* **Computer Vision**
-* **Prompt Engineering**
-* **Structured Output**
-
-## RAG
-
-* Document processing
-* Chunking
-* Embeddings
-* Vector database
-* Similarity search
-* Top-K retrieval
-* Retrieval evaluation
-
-## Data Validation
-
-* **Pydantic**
-
-## Image Processing
-
-* **Pillow**
-
-## Configuration
-
-* **python-dotenv**
-
-## Automation
-
-* **n8n**
-
-## Development
-
-* Git
-* GitHub
-* Python virtual environment
-
----
-
-# 📁 Project Structure
-
-```text
-AI_Return_Auditor/
-│
-├── agents/
-│   └── vision_agent.py
-│
-├── components/
-│   ├── styles.py
-│   ├── navbar.py
-│   └── cards.py
-│
-├── data/
-│   ├── policies/
-│   └── orders/
-│
-├── n8n/
-│   └── workflows/
-│
-├── prompts/
-│   └── vision_agent_v1.txt
-│
-├── rag/
-│   ├── ingestion/
-│   ├── retrieval/
-│   └── vector_store/
-│
-├── services/
-│
-├── views/
-│   ├── __init__.py
-│   ├── home.py
-│   ├── return_request.py
-│   ├── ai_analysis.py
-│   ├── decision.py
-│   └── human_review.py
-│
-├── app.py
-├── test_vision.py
-├── requirements.txt
-├── .env.example
-├── .gitignore
-└── README.md
-```
-
----
-
-# 🔐 Environment Configuration
-
-Create a `.env` file in the project root.
-
-```env
-GEMINI_API_KEY=your_gemini_api_key
-GEMINI_VISION_MODEL=gemini-3.1-flash-lite
-```
-
-**Never commit the `.env` file to GitHub.**
-
-The `.gitignore` file contains:
-
-```gitignore
-.env
-venv/
-__pycache__/
-*.pyc
-```
-
----
-
-# 🚀 Installation
-
-## 1. Clone the repository
+On macOS or Linux, create and activate the environment with:
 
 ```bash
-git clone <repository-url>
-cd AI_Return_Auditor
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-## 2. Create a virtual environment
-
-### Windows
+If PowerShell blocks activation, either allow local scripts for your user:
 
 ```powershell
-python -m venv venv
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 ```
 
-## 3. Activate the environment
+or activate from Command Prompt instead:
+
+```bat
+.venv\Scripts\activate.bat
+```
+
+Use the same virtual environment when running both FastAPI and Streamlit.
+
+## 2. Configure API keys and local services
+
+Copy the example file and edit it:
 
 ```powershell
-.\venv\Scripts\Activate.ps1
+Copy-Item .env.example .env
+notepad .env
 ```
 
-## 4. Install dependencies
+Set your own credentials in `.env`:
+
+```dotenv
+GEMINI_API_KEY=replace-with-your-gemini-api-key
+GROQ_API_KEY=replace-with-your-groq-api-key
+```
+
+The remaining values in `.env.example` select the current model and local service addresses. Never commit `.env` or share its contents.
+
+### Start Ollama and download the judge model
+
+Install Ollama from [ollama.com](https://ollama.com/) and download the configured model:
 
 ```powershell
-pip install -r requirements.txt
+ollama pull qwen2.5:7b
+ollama run qwen2.5:7b
 ```
 
-## 5. Configure the API key
+Ollama generally keeps its local service running after the model command starts. Leave the service available while processing claims. The FastAPI backend calls Ollama at `http://127.0.0.1:11434`; the judge intentionally requires a loopback URL.
 
-Create:
+### Start n8n
 
-```text
-.env
-```
-
-and add:
-
-```env
-GEMINI_API_KEY=your_gemini_api_key
-GEMINI_VISION_MODEL=gemini-3.1-flash-lite
-```
-
----
-
-# ▶️ Run the Application
-
-Start Streamlit:
+With Docker Desktop running, create persistent storage and start n8n:
 
 ```powershell
-streamlit run app.py
+docker volume create n8n_data
+docker run -d --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
 ```
 
-The application will open in the browser.
+Open [http://localhost:5678](http://localhost:5678), complete the initial n8n setup, and import the workflow:
 
----
+1. In n8n, choose **Import from File**.
+2. Select `n8n/workflow.json` from this project.
+3. Save and **activate** the imported workflow.
+4. Confirm its HTTP Request nodes use `http://host.docker.internal:8000` to call FastAPI.
 
-# 🧪 Test the Vision Agent
+The checked-in workflow export is inactive by default. The production webhook is `http://localhost:5678/webhook/return-claim`. A `/webhook-test/return-claim` URL works only while the Webhook node is listening for a test event. Re-import or update the n8n workflow when the local JSON changes; editing the file does not update an already-imported workflow.
 
-Before launching the complete application, the Vision Agent can be tested independently.
+If you already have n8n installed outside Docker, you can use that instance instead. Ensure it can reach FastAPI at the backend address configured in the workflow.
+
+## 3. Run the application
+
+Keep Ollama and n8n running. Open two PowerShell terminals in `AI_Return_Auditor`, activate `.venv` in each, and run:
+
+**Terminal 1 — FastAPI agent backend**
 
 ```powershell
-python test_vision.py
+.\.venv\Scripts\Activate.ps1
+uvicorn appBack:app --host 0.0.0.0 --port 8000
 ```
 
-The test validates:
+Binding to `0.0.0.0` allows the n8n Docker container to reach the backend through `host.docker.internal`. Do not expose this development server to an untrusted network.
 
-* Image loading
-* Gemini API connection
-* Multimodal analysis
-* Structured output
-* Pydantic validation
-* Customer description consistency
+**Terminal 2 — Streamlit client**
 
----
-
-# 📊 Example Vision Analysis
-
-For an image containing damaged eyeglasses and an unrelated customer description, the Vision Agent can produce structured information such as:
-
-```json
-{
-  "product_category": "Apparel & Accessories",
-  "product_type": "Eyeglasses",
-  "damage_type": "Broken / detached temple arm",
-  "damage_location": "Hinge / temple arm",
-  "severity": "High",
-  "confidence": 0.98,
-  "visual_evidence": "The image shows a pair of black eyeglasses with one temple arm completely detached.",
-  "description_consistency": "Inconsistent",
-  "uncertainty": "The customer's description does not correspond to the visual evidence."
-}
+```powershell
+.\.venv\Scripts\Activate.ps1
+streamlit run appUI.py
 ```
 
-This information is then available to the next stages of the verification workflow.
+Open the local URL printed by Streamlit, usually [http://localhost:8501](http://localhost:8501). The UI defaults to the n8n production webhook at `http://localhost:5678/webhook/return-claim` and progress endpoint at `http://127.0.0.1:8000`.
 
----
+The complete request can take several minutes, especially during the first retrieval-model load. The UI allows up to 30 minutes for the n8n response; the RAG and decision HTTP Request nodes each allow up to 10 minutes.
 
-# 🧠 Prompt Engineering
+## 4. Check service health and test a claim
 
-Prompts are stored separately from the Python implementation.
+In another terminal:
 
-Example:
+```powershell
+Invoke-RestMethod http://127.0.0.1:8000/health
+```
+
+Expected response:
 
 ```text
-prompts/
-└── vision_agent_v1.txt
+status
+------
+ok
 ```
 
-The prompt defines:
+Then submit a claim through the Streamlit app with a non-empty order number, description, and a PNG/JPG product image. Watch the execution in n8n and the stage progress in the app.
 
-* Agent role
-* Responsibilities
-* Forbidden decisions
-* Expected output
-* Severity categories
-* Uncertainty handling
-* Evidence requirements
+The recommendation is shown in the UI. The local compliance report is written to `llm_judge_verdict.json`; it is an internal diagnostic file and is not part of the customer result. The UI also stores local claim history in `audit_log.json`.
 
-Prompts are versioned to support experimentation and evaluation.
+## Configuration reference
 
-Future versions can be compared using:
+| Variable | Purpose | Default / example |
+|---|---|---|
+| `GEMINI_API_KEY` | Gemini Vision API credential. | Required. |
+| `GEMINI_VISION_MODEL` | Preferred image model. | `gemini-3.8-flash`; code has fallback model names. |
+| `GROQ_API_KEY` | Groq credential used by query expansion and decision sampling. | Required. |
+| `OLLAMA_BASE_URL` | Local Ollama base URL. | `http://127.0.0.1:11434` |
+| `OLLAMA_MODEL` | Local compliance judge model. | `qwen2.5:7b` |
+| `OLLAMA_TIMEOUT_SECONDS` | Judge request timeout. | `300` |
+| `N8N_WEBHOOK_URL` | Webhook used by the Streamlit client. | `http://localhost:5678/webhook/return-claim` |
+| `AUDIT_BACKEND_URL` | FastAPI base URL used for progress polling. | `http://127.0.0.1:8000` |
+| `AUDIT_LOG_PATH` | Path to local UI history. | `audit_log.json` |
+
+The FastAPI process loads `.env`. Streamlit uses the documented local URL defaults; if running services on other addresses, set `N8N_WEBHOOK_URL` and `AUDIT_BACKEND_URL` in the environment before launching Streamlit.
+
+## Troubleshooting
+
+### `The requested webhook "POST return-claim" is not registered`
+
+Import and activate the workflow in n8n, then use the production URL:
 
 ```text
-vision_agent_v1
-vision_agent_v2
-vision_agent_v3
+http://localhost:5678/webhook/return-claim
 ```
 
-This allows the project to document prompt improvements and failure fixes.
+For a temporary editor test, click **Listen for test event** and submit using `/webhook-test/return-claim` while it is listening.
 
----
+### n8n reports connection refused for `127.0.0.1:8000`
 
-# 📚 RAG Knowledge Base
-
-The RAG system will use a dedicated knowledge base containing relevant information such as:
-
-* Return policies
-* Refund conditions
-* Warranty rules
-* Product categories
-* Return deadlines
-* Damage conditions
-* Exceptions
-
-The retrieval process is designed around:
+Inside a Docker container, `127.0.0.1` refers to the container, not the Windows host. Verify the workflow HTTP nodes use:
 
 ```text
-Corpus
-  ↓
-Chunking
-  ↓
-Embedding
-  ↓
-Vector Store
-  ↓
-Query
-  ↓
-Top-K Retrieval
-  ↓
-Relevant Policy
-  ↓
-Decision Agent
+http://host.docker.internal:8000
 ```
 
-The project will also evaluate different chunking strategies and retrieval configurations to determine which approach provides the most relevant policy context.
+Also verify FastAPI is running with `--host 0.0.0.0`, and that Windows Firewall permits the local Docker-to-host connection.
 
----
+### Vision or decision endpoint reports a missing API key
 
-# 🔄 n8n Automation
+Check that `.env` exists in `AI_Return_Auditor`, contains the correct `GEMINI_API_KEY` and `GROQ_API_KEY`, and restart FastAPI after editing it.
 
-n8n is used as the **workflow orchestration and automation layer**.
+### Judge fails or Ollama connection is refused
 
-It is not considered an AI agent.
+Confirm Ollama is running, the model is present (`ollama list`), and `.env` contains:
 
-Its role is to coordinate the workflow between the application and AI components.
+```dotenv
+OLLAMA_BASE_URL=http://127.0.0.1:11434
+OLLAMA_MODEL=qwen2.5:7b
+```
 
-Example:
+The decision stage fails closed if the judge cannot produce and save a valid verdict; it does not return the unchecked consensus as a successful result.
+
+### RAG stage is slow or times out
+
+The first request may download and initialize the embedding and reranker models. Confirm internet access, sufficient disk space and memory, then retry. Check the n8n RAG HTTP Request node timeout is `600000` milliseconds. Do not assume a longer timeout fixes a backend crash or unavailable model service.
+
+### `ModuleNotFoundError` or install errors
+
+Activate the project virtual environment and run `python -m pip install -r requirements.txt`. If a package fails to build, use Python 3.11 and consult that package’s platform-specific installation instructions.
+
+## Workflow and implementation details
+
+The importable workflow is [`n8n/workflow.json`](./n8n/workflow.json). It calls FastAPI in order:
 
 ```text
-Return Request
-      ↓
-n8n Workflow
-      ↓
-Vision Agent
-      ↓
-Policy RAG
-      ↓
-Decision Agent
-      ↓
-Decision
-      ↓
-Human Review if required
+Webhook → Vision → RAG → merge claim + evidence → Decision + Judge → response
 ```
 
----
+The IF node returns an escalation response when the final decision is `ESCALATE_HUMAN`. This branch does not create a staffed review ticket; human review remains a recommendation/status, not a completed operational process.
 
-# 🛡️ Safety and Guardrails
+The detailed [project report](./PROJECT_REPORT.md) describes request shapes, retrieval and consensus behavior, privacy considerations, and known limitations.
 
-The system is designed around the principle:
+## Security and data handling
 
-> **AI should assist the decision, not blindly make it.**
+- Use test claims and sample photos for development. This prototype has no user authentication or access control.
+- FastAPI’s stage endpoints are unauthenticated. Keep the backend on trusted local development networks only.
+- Do not commit `.env`, `audit_log.json`, or `llm_judge_verdict.json`; the latter two may contain claim-related data.
+- The judge report is a shared overwrite file. Concurrent requests can overwrite one another’s report.
+- No explicit upload-size limit, production retention policy, or automated security controls are currently configured.
+- Recommendations should be reviewed by a human before being used for real customer decisions.
 
-Guardrails help prevent automatic decisions when:
+## Current implementation status
 
-* Evidence is contradictory
-* Confidence is insufficient
-* The customer description does not match the image
-* Policy information is insufficient
-* Required data is missing
-* The claim is ambiguous
-
-In such cases:
-
-```text
-AI uncertainty
-      ↓
-Human Review
-```
-
----
-
-# 🎓 Academic Objectives
-
-This project demonstrates the integration of several modern AI concepts:
-
-* Multi-Agent Systems
-* Multimodal AI
-* Computer Vision
-* Large Language Models
-* Prompt Engineering
-* Retrieval-Augmented Generation
-* Embeddings
-* Vector Search
-* Structured AI Output
-* AI Guardrails
-* Human-in-the-Loop
-* Workflow Automation
-* Explainable AI
-
-The project also demonstrates how these technologies can be combined into a realistic e-commerce business use case.
-
----
-
-# 📌 Project Status
-
-| Component                        | Status                  |
-| -------------------------------- | ----------------------- |
-| Streamlit interface              | ✅ Implemented           |
-| Home interface                   | ✅ Implemented           |
-| Return Request                   | ✅ Implemented           |
-| Vision Agent                     | ✅ Implemented & tested  |
-| Multimodal image + text analysis | ✅ Implemented           |
-| Structured VisionAnalysis        | ✅ Implemented           |
-| Prompt versioning                | ✅ Started               |
-| Policy RAG                       | 🔄 In development       |
-| Decision Agent                   | 🔄 In development       |
-| Guardrails                       | 🔄 In development       |
-| n8n workflow                     | 🔄 In development       |
-| Human Review                     | ✅ Interface implemented |
-| Retrieval evaluation             | 🔄 Planned              |
-| End-to-end workflow              | 🔄 In development       |
-
----
-
-# 👥 Human-in-the-Loop Principle
-
-The project follows a hybrid AI approach:
-
-```text
-              AI
-               │
-       ┌───────┴───────┐
-       │               │
-   High confidence   Uncertainty
-       │               │
-       ▼               ▼
-   Automatic        Human Review
-   decision
-```
-
-This approach improves reliability and reduces the risk of incorrect automated refund decisions.
-
----
-
-# 🎯 Future Improvements
-
-Potential improvements include:
-
-* Advanced RAG retrieval
-* Reranking
-* Retrieval evaluation metrics
-* More return policy scenarios
-* Better decision explanations
-* Complete n8n automation
-* Audit logs
-* Prompt evaluation
-* Confidence calibration
-* Additional multimodal inputs
-* Analytics dashboard
-* Human reviewer feedback loop
-
----
-
-# 👩‍💻 Project
-
-**AI Return Auditor**
-
-**Domain:** E-Commerce / Artificial Intelligence
-
-**Main concepts:**
-Multimodal AI • Computer Vision • RAG • Multi-Agent Systems • Guardrails • Human-in-the-Loop • Workflow Automation
-
-**Built with:** Python • Streamlit • Gemini API • Pydantic • Pillow • n8n
+- Implemented: Streamlit client, FastAPI stage endpoints, Gemini Vision, policy retrieval, Groq self-consistency decision, local Ollama compliance judge, and n8n orchestration export.
+- Not integrated: receipt OCR, order/payment system actions, and a real human-review queue.
+- Deployment note: the n8n JSON export is inactive by default and must be imported and activated in your own n8n instance.
