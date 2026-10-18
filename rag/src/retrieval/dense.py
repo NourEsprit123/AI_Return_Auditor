@@ -1,17 +1,13 @@
-import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
-
 from rag.src.embeddings import (
     chunk_ids,
     chunkedJSON,
     get_embedding_model,
-    get_embeddings,
-    texts,
+    get_vector_collection,
 )
 
 
 def dense_search(query: str, top_k: int = 10, min_score: float | None = None):
-    if not query:
+    if not query or top_k <= 0 or not chunk_ids:
         return []
 
     query_output = get_embedding_model().encode(
@@ -20,20 +16,29 @@ def dense_search(query: str, top_k: int = 10, min_score: float | None = None):
         return_sparse=False,
         return_colbert_vecs=False,
     )
-    query_vec = np.array(query_output["dense_vecs"][0], dtype=np.float32).reshape(1, -1)
+    query_vec = query_output["dense_vecs"][0].tolist()
+    results = get_vector_collection().query(
+        query_embeddings=[query_vec],
+        n_results=min(top_k, len(chunk_ids)),
+        include=["documents", "metadatas", "distances"],
+    )
 
-    scores = cosine_similarity(query_vec, get_embeddings())[0]
-    top_indices = np.argsort(scores)[::-1][:top_k]
-
-    results = []
-    for idx in top_indices:
-        if min_score is not None and scores[idx] < min_score:
-            break  # sorted descending, so everything after is lower
-        results.append({
-            "chunk_id": chunk_ids[idx],
-            "title": chunkedJSON[idx].get("title", ""),
-            "score": float(scores[idx]),
-            "text": texts[idx],
-            "index": int(idx),
+    chunk_index_by_id = {chunk_id: index for index, chunk_id in enumerate(chunk_ids)}
+    matches = []
+    for chunk_id, text, metadata, distance in zip(
+        results["ids"][0],
+        results["documents"][0],
+        results["metadatas"][0],
+        results["distances"][0],
+    ):
+        score = 1.0 - distance
+        if min_score is not None and score < min_score:
+            continue
+        matches.append({
+            "chunk_id": chunk_id,
+            "title": metadata.get("title", ""),
+            "score": float(score),
+            "text": text,
+            "index": chunk_index_by_id[chunk_id],
         })
-    return results
+    return matches

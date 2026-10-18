@@ -21,7 +21,7 @@ For implementation details, data flow, model behavior, limitations, and the comp
 - n8n running locally. Docker Desktop is recommended for Windows.
 - Internet access for API calls and first-time download of Python/model dependencies.
 
-The retrieval embedding and reranking models are downloaded the first time the RAG stage runs. They may require several gigabytes of storage and can make the first request take longer.
+The retrieval embedding and reranking models are downloaded the first time the RAG stage runs. Policy chunk embeddings are persisted locally in `.chroma/`, so unchanged chunks are not re-embedded after an application restart. New or changed chunks are embedded when the index is initialized after the corpus changes (typically at the next application start). The models may require several gigabytes of storage and can make the first request take longer.
 
 ## 1. Get the project and install Python dependencies
 
@@ -231,8 +231,9 @@ The detailed [project report](./PROJECT_REPORT.md) describes request shapes, ret
 - Use test claims and sample photos for development. This prototype has no user authentication or access control.
 - FastAPI’s stage endpoints are unauthenticated. Keep the backend on trusted local development networks only.
 - Do not commit `.env`, `audit_log.json`, or `llm_judge_verdict.json`; the latter two may contain claim-related data.
+- Claim images and descriptions are sent to Gemini for vision analysis, and claim/evidence context is sent to Groq for retrieval query expansion and decision sampling. Review those providers’ data-handling terms before using real customer data.
 - The judge report is a shared overwrite file. Concurrent requests can overwrite one another’s report.
-- No explicit upload-size limit, production retention policy, or automated security controls are currently configured.
+- There is no explicit upload-size limit, production retention policy, authentication, rate limiting, or deployment-grade security layer. API errors may also expose exception details to callers.
 - Recommendations should be reviewed by a human before being used for real customer decisions.
 
 ## Current implementation status

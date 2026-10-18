@@ -131,7 +131,7 @@ The underlying components are:
 | Rank fusion | Weighted reciprocal-rank fusion; dense weight `0.4`, sparse weight `0.6`, `rrf_k=20`. |
 | Reranking | `BAAI/bge-reranker-v2-m3`, returning up to four passages. |
 
-The embedding and reranker models are loaded lazily and cached in the running Python process. First-use retrieval may therefore take substantially longer than subsequent calls, depending on model downloads and local hardware.
+The embedding and reranker models are loaded lazily and cached in the running Python process. Dense policy-chunk embeddings are stored in the local Chroma database at `.chroma/`; on first dense retrieval, only chunks missing from or changed against the processed corpus are embedded. Query embeddings are still computed per search. First-use retrieval may therefore take substantially longer than subsequent calls, depending on model downloads and local hardware.
 
 ### 4.5 Self-consistency Decision Agent
 
@@ -527,20 +527,23 @@ An already-imported n8n workflow does not inherit edits to the local `workflow.j
 
 ### Implemented safeguards
 
-- `.env` is listed in the project `.gitignore`.
-- Input request fields are validated with Pydantic.
-- Uploaded images are base64-decoded and validated as readable images before Vision processing.
-- The judge accepts only a loopback Ollama URL, helping keep claim data on the local machine.
+- `.env`, `audit_log.json`, and `llm_judge_verdict.json` are listed in `.gitignore`. This prevents accidental Git tracking; it does not encrypt or otherwise protect local files.
+- Request models use Pydantic validation for required strings and non-negative item values.
+- Uploaded images are base64-decoded and checked as readable images before Vision processing.
+- The judge accepts only a loopback Ollama URL, keeping that compliance-check request on the local machine.
 - The judge requests schema-constrained JSON and validates the returned booleans, findings, and rationale.
-- Judge errors do not permit an unchecked decision to be returned.
-- The judge report is stored separately from the customer-facing response.
+- Judge errors fail the decision request instead of allowing an unchecked recommendation through.
+- The judge report is stored separately from the customer-facing response and written via a temporary file followed by an atomic replace.
+- HTTP clients and the judge use request timeouts; slow agent work is moved off FastAPI's async event loop.
 
 ### Remaining risks and recommended improvements
 
 - **No authentication on FastAPI stage endpoints:** Anyone who can reach the backend may invoke costly agent calls. Add a shared service credential between n8n and FastAPI, stored in n8n credentials and `.env`, never in the browser client.
 - **Network exposure:** FastAPI binds to `0.0.0.0`. Restrict it with host firewall rules and keep it off public networks unless protected by a deployment-grade network boundary and HTTPS.
 - **No explicit upload size or image-dimension limit:** Add limits before decoding/processing to reduce memory exhaustion risk.
-- **Sensitive local files:** `audit_log.json` and `llm_judge_verdict.json` contain claim-related or judge data. The current `.gitignore` does not list these files. Add them to ignore/retention controls before using real customer data or pushing the project to a repository.
+- **Sensitive local files:** `audit_log.json` and `llm_judge_verdict.json` may contain claim-related or judge data. They are Git-ignored, but remain local plaintext files without encryption, access controls, or a production retention policy.
+- **Third-party data processing:** Vision images and descriptions go to Gemini; claim/evidence context goes to Groq for query expansion and decision sampling. Review provider data-handling terms and avoid real customer data unless the applicable privacy requirements are met.
+- **Error detail disclosure:** Some API error responses include exception type and message. Return generic client-safe errors while keeping diagnostic detail in protected server logs.
 - **Local UI history is not access-controlled:** Audit records are stored as a local JSON file, not segregated per customer or protected by accounts.
 - **Prompt injection exposure:** Customer text and retrieved document text are untrusted. Keep them explicitly framed as evidence, not instructions, in each model prompt; test adversarial inputs.
 - **Model verdicts are not guarantees:** The self-consistency panel and the Judge are both probabilistic. Retain human oversight and evaluate false approvals, false escalations, and policy coverage.
