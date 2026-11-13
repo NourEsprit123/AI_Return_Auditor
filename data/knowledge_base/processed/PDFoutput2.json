@@ -1,0 +1,122 @@
+[
+  {
+    "chunk_id": "sec-1",
+    "section_id": "1",
+    "title": "Introduction &amp; Scope",
+    "text": "## 1. Introduction &amp; Scope\n\nThis Return &amp; Refund Policy (\"Policy\") governs all purchases made through our e-commerce platforms, mobile applications, and authorized third-party marketplaces. It applies to physical goods, digital products, and hybrid offerings. The Policy is written to support both customer transparency and high-precision automated auditing by Visual E-Commerce Return &amp; Refund Auditor agents. All return requests are subject to visual inspection (where applicable), condition scoring, eligibility rules, and financial reconciliation rules defined herein.\n\nThis document supersedes all prior return policies. In the event of conflict between this Policy and any product-specific terms, the more restrictive rule applies unless explicitly stated otherwise by the seller or platform.",
+    "char_count": 810,
+    "approx_tokens": 202
+  },
+  {
+    "chunk_id": "sec-2",
+    "section_id": "2",
+    "title": "Key Definitions",
+    "text": "## 2. Key Definitions\n\n· Original Condition: Item is unused, unworn, unwashed, free of odors, stains, scratches, or alterations, and includes all original packaging, tags, manuals, accessories, and protective films.\n\n· Visual Inspection Score (VIS): A numerical score (0-100) produced by computer-vision models that evaluate packaging integrity, product surface condition, completeness of accessories, and evidence of use.\n\n· Return Window: The period, measured in calendar days from the delivery confirmation date (or estimated delivery date if confirmation is unavailable), during which a return request may be initiated.\n\n· Restocking Fee: A percentage deduction from the refundable amount applied when an item is returned outside the full-refund window or fails to meet Original Condition criteria.\n\n· Gift Purchase: An order marked as a gift at checkout and shipped to a recipient other than the purchaser. Refunds for gifts are issued as store credit only.\n\n· Final Sale: Items explicitly marked \"Final Sale\", \"No Returns\", or sold under clearance / open-box / as-is conditions. These items are ineligible for return except for verified defects.\n\n· Defective / Damaged in Transit: Product that arrives with manufacturing defects or shipping damage. These cases follow a separate, accelerated resolution path and are not subject to standard restocking fees.\n\n· Digital Goods: Software licenses, downloadable content, e-books, digital gift cards, NFTs, and any product delivered exclusively via electronic means.",
+    "char_count": 1516,
+    "approx_tokens": 379
+  },
+  {
+    "chunk_id": "sec-3",
+    "section_id": "3",
+    "title": "Eligibility for Returns &amp; Exchanges",
+    "text": "## 3. Eligibility for Returns &amp; Exchanges\n\nTo be eligible for a full or partial refund or an exchange, the following conditions must be met:\n\n- The return request must be initiated within the applicable Return Window (see Section 4).\n- The item must be in Original Condition unless the claim is for a verified defect or transit damage.\n- Proof of purchase (order number, invoice, or gift receipt) must be provided.\n- The item must not fall into a non-returnable category listed in Section 5.\n- All original packaging, tags, certificates of authenticity, manuals, cables, and accessories must be returned with the product.\n\n· For apparel and footwear: original tags must remain attached; items must be free of wear, odors, makeup, or alterations.\n\n- For electronics: all protective films, seals, and anti-tamper stickers must be intact unless the claim is defect-related.\n- Serial numbers, IMEI, or unique identifiers must match the original shipment record.\n\nItems that fail Visual Inspection (VIS &lt; 70) or show clear signs of use, modification, or missing components will be subject to partial refunds or rejection according to the schedules in Sections 7 and 8.",
+    "char_count": 1170,
+    "approx_tokens": 292
+  },
+  {
+    "chunk_id": "sec-4",
+    "section_id": "4",
+    "title": "Return Windows by Category",
+    "text": "## 4. Return Windows by Category\n\nReturn windows are calculated from the date the carrier marks the package as delivered. If delivery confirmation is unavailable, the estimated delivery date is used.\n\n| Product Category                      | Standard Return Window   | Extended Window (Premium Members)   | Notes                                   |\n|---------------------------------------|--------------------------|-------------------------------------|-----------------------------------------|\n| Apparel, Footwear, Accessories        | 30 days                  | 45 days                             | Tags must remain attached               |\n| Electronics (sealed)                  | 15 days                  | 30 days                             | Anti-tamper seals required              |\n| Home, Furniture, Décor                | 30 days                  | 45 days                             | Large items may require pickup          |\n| Beauty & Personal Care (unopened)     | 30 days                  | 30 days                             | Opened hygiene items non-returnable     |\n| Collectibles & Trading Cards (sealed) | 14 days                  | 14 days                             | Opened packs non-returnable             |\n| Books, Media (physical)               | 30 days                  | 45 days                             | Opened media subject to restocking      |\n| Digital Goods / Downloads             | 0 days (non-returnable)  | 0 days                              | Exception: technical delivery failure   |\n| Final Sale / Clearance                | 0 days                   | 0 days                              | Defect claims only                      |\n| Custom / Personalized Items           | 0 days                   | 0 days                              | Defect claims only                      |\n| Perishable / Grocery                  | 0 days                   | 0 days                              | Spoilage claims within 24 h of delivery |\n\nPremium Members (active paid subscription) receive the Extended Window shown above. Holiday orders placed between November 1 and December 24 may use a special window of 45 days from delivery or January 31 of the following year, whichever is later.",
+    "char_count": 2237,
+    "approx_tokens": 559
+  },
+  {
+    "chunk_id": "sec-5",
+    "section_id": "5",
+    "title": "Non-Returnable Items",
+    "text": "## 5. Non-Returnable Items\n\nThe following categories are excluded from standard returns. Claims for manufacturing defects or damage in transit remain valid and follow the accelerated path in Section 9.\n\n- Trading cards, sports cards, Pokémon cards, and all trading-card accessories once the seal is broken or the pack is opened.\n- Opened or unsealed collectibles, limited-edition figures, and items with broken authenticity seals.\n- Personalized, monogrammed, engraved, or custom-made products (except verified defects).\n- Digital downloads, software license keys, e-books, digital gift cards, and NFT transfers once delivery is confirmed.\n- Opened or unsealed hygiene, personal-care, intimate, or cosmetic products.\n\n- Underwear, swimwear, and hosiery if the hygiene seal has been removed.\n- Perishable goods, food, beverages, and plants (except spoilage claims filed within 24 hours of delivery).\n- Gift cards (physical or digital) and promotional certificates.\n- Items marked \"Final Sale\", \"As-Is\", \"Open Box - Non-Returnable\", or sold through liquidation channels.\n- Hazardous materials, flammable liquids, and products restricted by carrier regulations.",
+    "char_count": 1158,
+    "approx_tokens": 289
+  },
+  {
+    "chunk_id": "sec-6",
+    "section_id": "6",
+    "title": "Return Process (Step-by-Step)",
+    "text": "## 6. Return Process (Step-by-Step)\n\n## 6.1 Initiating a Return\n\nCustomers must initiate a return through the Order History page, the mobile app, or by contacting Customer Support with the order number. A Return Merchandise Authorization (RMA) number is generated automatically. Returns without a valid RMA may be refused or delayed.\n\n## 6.2 Packaging &amp; Shipping\n\n- Place the item in its original packaging whenever possible. If original packaging is unavailable, use a sturdy box with adequate protective material.\n- Include the packing slip or a printed copy of the RMA confirmation inside the package.\n- Affix the prepaid return shipping label (if provided) to the outside of the package. Do not cover barcodes.\n- Do not send the item back to the original manufacturer unless explicitly instructed.\n- Large or heavy items may require scheduled carrier pickup; instructions will appear in the RMA portal.\n- Customers are responsible for obtaining proof of shipment (tracking number). Risk of loss remains with the customer until the return is scanned into the warehouse system.\n\n## 6.3 Return Shipping Costs\n\nFor standard returns within the Return Window and in Original Condition, return shipping is free when the prepaid label is used. If the customer chooses a different carrier, reimbursement is limited to the cost of the prepaid label rate. Returns due to customer change-of-mind after the free-return window may incur shipping costs deducted from the refund. Defect and transit-damage returns always include free return shipping.\n\n## 6.4 Visual Inspection &amp; Processing\n\nUpon receipt, the warehouse performs a multi-stage inspection: (1) package integrity scan, (2) product Visual Inspection Score (VIS) generation via computer vision, (3) accessory and serial-number verification, (4) condition grading. The resulting VIS and human override (if any) determine the final refund percentage according to the tables in Sections 7 and 8. Typical processing time after receipt is 2-5 business days.",
+    "char_count": 2009,
+    "approx_tokens": 502
+  },
+  {
+    "chunk_id": "sec-7",
+    "section_id": "7",
+    "title": "Refund Methods &amp; Processing Times",
+    "text": "## 7. Refund Methods &amp; Processing Times\n\nOnce a return is approved and the refund amount is calculated, funds are issued according to the original payment method unless the purchase was marked as a gift (store credit only) or the payment method is no longer available.\n\n| Refund Method                          | Typical Time After Approval   | Maximum Time     | Notes                   |\n|----------------------------------------|-------------------------------|------------------|-------------------------|\n| Credit Card (Visa, MC, Amex, Discover) | 3-5 business days             | 10 business days | Depends on issuing bank |\n| Debit Card                             | 3-7 business days             | 10 business days | May appear as pending   |\n| PayPal / Venmo / Shop Pay              | 1-3 business days             | 5 business days  | Instant in some cases   |\n\n| Refund Method                                 | Typical Time After Approval   | Maximum Time            | Notes                           |\n|-----------------------------------------------|-------------------------------|-------------------------|---------------------------------|\n| Apple Pay / Google Pay                        | 3-5 business days             | 10 business days        | Follows underlying card         |\n| Store Credit / Gift Card Balance              | 2-3 hours                     | 24 hours                | Issued as digital gift card     |\n| Gift Card (physical)                          | 2-3 hours (balance)           | -                       | Physical card not reissued      |\n| Buy Now, Pay Later (Affirm, Klarna, Afterpay) | 3-7 business days             | 14 business days        | Installment plan adjusted       |\n| Reward Points / Loyalty Currency              | 1-5 business days             | 7 business days         | Points restored to account      |\n| Checking / ACH Account                        | 5-10 business days            | 15 business days        | Bank processing varies          |\n| SNAP EBT                                      | 5-10 business days            | 15 business days        | Subject to state rules          |\n| Prepaid Credit Card                           | Up to 30 days                 | 30 days                 | Issuer dependent                |\n| Cash / Money Order (in-store)                 | Immediate (in-store)          | 10 business days (mail) | Receipt required                |\n| Cryptocurrency                                | 1-3 business days             | 7 business days         | Network fees may apply          |\n| Promotional Certificate / Coupon              | No cash refund                | -                       | Value may be reissued as credit |\n\nRefunds are issued in the original tender currency unless otherwise required by law. Currency conversion fees charged by the customer's bank are not reimbursed.",
+    "char_count": 2882,
+    "approx_tokens": 720
+  },
+  {
+    "chunk_id": "sec-8",
+    "section_id": "8",
+    "title": "Partial Refunds &amp; Restocking Fees",
+    "text": "## 8. Partial Refunds &amp; Restocking Fees\n\nWhen an item is returned outside the full-refund window, fails to meet Original Condition, or receives a VIS below the full-refund threshold, a partial refund or restocking fee is applied. The tables below are used by both human agents and the automated Auditor.\n\n## 8.1 Condition-Based Refund Schedule\n\n| Condition / Reason                        | VIS Range   | Refund % of Item Price   | Restocking Fee   |\n|-------------------------------------------|-------------|--------------------------|------------------|\n| Original Condition, within window         | 90-100      | 100%                     | 0%               |\n| Minor packaging damage only               | 80-89       | 100%                     | 0%               |\n| Light signs of handling / try-on          | 70-79       | 90%                      | 10%              |\n| Opened but unused (non-hygiene)           | 60-69       | 75-85%                   | 15-25%           |\n| Missing minor accessory / manual          | 50-69       | 70-80%                   | 20-30%           |\n| Obvious use, wear, or odor                | 30-59       | 40-60%                   | 40-60%           |\n| Damaged by customer / missing major parts | 0-29        | 0-30%                    | 70-100%          |\n| Past return window, Original Condition    | 90-100      | 80%                      | 20%              |\n| Past return window + light use            | 70-89       | 50-70%                   | 30-50%           |\n\n| Condition / Reason                           | VIS Range   | Refund % of Item Price   | Restocking Fee   |\n|----------------------------------------------|-------------|--------------------------|------------------|\n| Open software / video games (customer error) | N/A         | 0%                       | 100%             |\n| Opened CDs, DVDs, vinyl (out of wrap)        | N/A         | 50%                      | 50%              |\n| Hygiene / personal care opened               | N/A         | 0%                       | 100%             |\n\n## 8.2 Special Category Rules\n\n- Electronics: Broken anti-tamper seal without a defect claim fi maximum 50% refund.\n- Apparel: Missing or cut tags fi treated as \"light use\" (90% maximum).\n- Collectibles: Any broken seal or opened packaging fi non-returnable (0%).\n- Furniture / Large items: Customer-arranged return shipping; restocking fee of 15% may apply even within window if item requires re-packaging.\n- Multiple-item orders: Each line item is evaluated independently; refunds are issued per eligible item.",
+    "char_count": 2574,
+    "approx_tokens": 643
+  },
+  {
+    "chunk_id": "sec-9",
+    "section_id": "9",
+    "title": "Defective Products &amp; Damage in Transit",
+    "text": "## 9. Defective Products &amp; Damage in Transit\n\nClaims for manufacturing defects or damage that occurred during shipping follow an accelerated path and are exempt from standard restocking fees.\n\n- Customer must report the issue within 7 days of delivery (or 48 hours for perishable / high-value items) and provide clear photographs or video of the defect or damage, including packaging condition.\n- An RMA is issued with a \"Defect / Damage\" flag. Visual Inspection is still performed but weighted toward confirming the reported issue.\n- If the claim is verified, the customer may choose: (a) full refund, (b) replacement (subject to stock), or (c) store credit of equal or greater value.\n- Return shipping is free. In some cases the customer may be instructed to retain or dispose of the item (no return required).\n- Fraudulent defect claims (item shows no defect and evidence of intentional damage) result in claim denial and possible account review.",
+    "char_count": 953,
+    "approx_tokens": 238
+  },
+  {
+    "chunk_id": "sec-10",
+    "section_id": "10",
+    "title": "Exchanges",
+    "text": "## 10. Exchanges\n\nExchanges for size, color, or equivalent product are offered when stock is available. The original item must meet the same eligibility criteria as a return. Price differences are charged or refunded accordingly. If the desired exchange item is unavailable, a refund is issued instead. Exchange shipping is free for the first exchange per order; subsequent exchanges may incur shipping charges.",
+    "char_count": 411,
+    "approx_tokens": 102
+  },
+  {
+    "chunk_id": "sec-11",
+    "section_id": "11",
+    "title": "Gift Purchases",
+    "text": "## 11. Gift Purchases\n\nWhen an order is marked as a gift and shipped directly to the recipient:\n\n- The recipient may return the item for store credit equal to the item's value (no cash refund to the recipient).\n- The original purchaser may request a refund to the original payment method only if the gift has not yet been redeemed or returned by the recipient.\n- Gift receipts do not display pricing. Returns using a gift receipt follow the same condition and window rules.\n- Personalized gift items remain non-returnable except for defects.",
+    "char_count": 541,
+    "approx_tokens": 135
+  },
+  {
+    "chunk_id": "sec-12",
+    "section_id": "12",
+    "title": "International Orders",
+    "text": "## 12. International Orders\n\nInternational customers are responsible for return shipping costs unless the return is due to a verified defect or shipping error. Duties, taxes, and customs fees paid on the original shipment are non-refundable. Refunds are issued in the original transaction currency. Additional carrier or brokerage fees incurred on the return are the customer's responsibility.",
+    "char_count": 393,
+    "approx_tokens": 98
+  },
+  {
+    "chunk_id": "sec-13",
+    "section_id": "13",
+    "title": "Rules for Automated Visual E-Commerce Return &amp; Refund Auditor",
+    "text": "## 13. Rules for Automated Visual E-Commerce Return &amp; Refund Auditor\n\nThis section provides explicit decision logic intended for consumption by RAG-augmented auditor agents. Agents must apply the rules in the order of precedence shown.\n\n## 13.1 Decision Precedence\n\n1. Is the item in a non-returnable category (Section 5)? fi Deny unless defect claim is verified.\n2. Was the return initiated within the applicable Return Window (Section 4)? fi If no, apply past-window schedule.\n3. Is there a verified defect or transit-damage claim (Section 9)? fi Full refund / replacement path; skip restocking.\n4. Compute or retrieve Visual Inspection Score (VIS).\n5. Map VIS + category + window status to the Condition-Based Refund Schedule (Section 8.1).\n6. Apply any Special Category Rules (Section 8.2).\n7. Determine refund method and expected timing (Section 7).\n8. Generate audit trail: RMA, VIS, photos referenced, final percentage, and rationale string.\n\n## 13.2 Minimum Evidence Requirements for Auditor Approval\n\n- Order ID and line-item SKU must match warehouse receipt records.\n- At least one clear photograph of the returned item and one of the packaging (or a note that packaging was absent).\n- Serial / IMEI / authenticity code verification result (pass / fail / not applicable).\n- VIS score with model version identifier.\n- Human override flag and reason code if the automated recommendation is altered.\n\n## 13.3 Fraud &amp; Abuse Signals\n\nThe Auditor should flag for secondary review any return that exhibits two or more of the following:\n\n- High return velocity from the same account or shipping address within 90 days.\n- VIS indicates heavy use or damage inconsistent with the stated reason for return.\n- Serial number mismatch or evidence of product substitution.\n- Repeated defect claims on the same SKU family from the same customer.\n- Return of high-value electronics with broken seals and no supporting defect photos.\n- Use of multiple accounts linked by payment method or device fingerprint.",
+    "char_count": 2007,
+    "approx_tokens": 501
+  },
+  {
+    "chunk_id": "sec-14",
+    "section_id": "14",
+    "title": "Contact &amp; Escalation",
+    "text": "## 14. Contact &amp; Escalation\n\nQuestions regarding this Policy, status of a specific RMA, or escalation of an Auditor decision may be directed to:\n\n| Returns Department   | returns@example-commerce.com                                         |\n|----------------------|----------------------------------------------------------------------|\n| Customer Support     | support@example-commerce.com (800) 555-0199 (Mon-Fri 08:00-20:00 ET) |\n\n| Mailing Address for Returns   | Returns Processing Center 123 Maple Street Anytown, PA 17101 United States   |\n|-------------------------------|------------------------------------------------------------------------------|\n| Policy Owner / Legal          | legal@example-commerce.com                                                   |",
+    "char_count": 777,
+    "approx_tokens": 194
+  },
+  {
+    "chunk_id": "sec-15",
+    "section_id": "15",
+    "title": "Version History &amp; Legal Notice",
+    "text": "## 15. Version History &amp; Legal Notice\n\nVersion 2.1 - Effective October 12, 2026. Previous versions are archived and available upon request. This Policy is provided for operational and training purposes. It does not constitute legal advice. Merchants should consult qualified counsel to ensure compliance with applicable consumer-protection, e-commerce, and data-privacy regulations in each jurisdiction of operation. Automated Auditor decisions remain subject to human review and applicable law.\n\n© 2026 Example Commerce Platform. All rights reserved. This document is intended for internal use with Visual E-Commerce Return &amp; Refund Auditor systems.",
+    "char_count": 658,
+    "approx_tokens": 164
+  }
+]

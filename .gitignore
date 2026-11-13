@@ -1,5 +1,10 @@
-venv/
 .env
+venv/
+.venv/
+.env.*
+!.env.example
 __pycache__/
 *.pyc
 .chroma/
+audit_log.json
+llm_judge_verdict.json

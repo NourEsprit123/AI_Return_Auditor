@@ -1,0 +1,225 @@
+{
+  "name": "AI Return Auditor - Full Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "return-claim",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "node_webhook",
+      "name": "Webhook - Receive Claim",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300],
+      "notes": "Receives JSON with request_id, image_base64, user_description, order_id, product_name, and item_value."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/analyze/vision",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ request_id: $('Webhook - Receive Claim').item.json.body.request_id, image_base64: $('Webhook - Receive Claim').item.json.body.image_base64, customer_description: $('Webhook - Receive Claim').item.json.body.user_description }) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "node_vision",
+      "name": "Agent 1 - Vision Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300],
+      "notes": "Analyzes the original product image and description."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/analyze/rag",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ request_id: $('Webhook - Receive Claim').item.json.body.request_id, customer_description: $('Webhook - Receive Claim').item.json.body.user_description, vision_agent_json: $('Agent 1 - Vision Agent').item.json }) }}",
+        "options": {
+          "timeout": 600000
+        }
+      },
+      "id": "node_rag",
+      "name": "Agent 2 - RAG Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 300],
+      "notes": "Retrieves policy passages using both the original description and Vision JSON."
+    },
+    {
+      "parameters": {
+        "jsCode": "const claim = $('Webhook - Receive Claim').item.json.body;\nconst vision = $('Agent 1 - Vision Agent').item.json;\nconst rag = $('Agent 2 - RAG Agent').item.json;\n\nreturn [{ json: {\n  request_id: claim.request_id,\n  order_id: claim.order_id,\n  product_name: claim.product_name || '',\n  item_value: Number(claim.item_value || 0),\n  original_user_description: claim.user_description,\n  vision_agent_json: vision,\n  rag_agent_json: rag\n} }];"
+      },
+      "id": "node_merge",
+      "name": "Merge - Vision + RAG + Claim",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [980, 300],
+      "notes": "Passes the original claim, vision evidence, and retrieved policies to the decision agent."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/analyze/decision",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ request_id: $json.request_id, order_id: $json.order_id, product_name: $json.product_name, item_value: $json.item_value, original_user_description: $json.original_user_description, vision_agent_json: $json.vision_agent_json, rag_agent_json: $json.rag_agent_json }) }}",
+        "options": {
+          "timeout": 600000
+        }
+      },
+      "id": "node_decision",
+      "name": "Agent 3 - Decision Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1240, 300],
+      "notes": "Runs self-consistency, business guardrails, and the local Ollama compliance judge before returning a decision."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "condition_human_review",
+              "leftValue": "={{ $json.decision }}",
+              "rightValue": "ESCALATE_HUMAN",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node_if",
+      "name": "IF - Human Review Required",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1500, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'success', pipeline_trace: { vision_agent: $('Agent 1 - Vision Agent').item.json, rag_agent: $('Agent 2 - RAG Agent').item.json, decision_output: $('Agent 3 - Decision Agent').item.json } }) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "node_respond_resolved",
+      "name": "Respond - Resolved",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1760, 440]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'escalated', pipeline_trace: { vision_agent: $('Agent 1 - Vision Agent').item.json, rag_agent: $('Agent 2 - RAG Agent').item.json, decision_output: $('Agent 3 - Decision Agent').item.json } }) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "node_respond_review",
+      "name": "Respond - Human Review",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1760, 160]
+    }
+  ],
+  "connections": {
+    "Webhook - Receive Claim": {
+      "main": [
+        [
+          {
+            "node": "Agent 1 - Vision Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent 1 - Vision Agent": {
+      "main": [
+        [
+          {
+            "node": "Agent 2 - RAG Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent 2 - RAG Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge - Vision + RAG + Claim",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge - Vision + RAG + Claim": {
+      "main": [
+        [
+          {
+            "node": "Agent 3 - Decision Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent 3 - Decision Agent": {
+      "main": [
+        [
+          {
+            "node": "IF - Human Review Required",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Human Review Required": {
+      "main": [
+        [
+          {
+            "node": "Respond - Human Review",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond - Resolved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}
